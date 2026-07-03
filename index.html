@@ -223,8 +223,8 @@ background:#f5f5f5;
 font-size:11px;
 font-weight:bold;
 }
-
-.activityCell {
+ 
+ .activityCell {
   text-align: left;
   font-size: 10px;
   font-weight: bold;
@@ -446,6 +446,9 @@ display:none !important;
 .editColumn{
 display:none !important;
 }
+#resetAllBtn{
+display:none !important;
+}
 #printArea{
 display:block !important;
 width:100%;
@@ -475,18 +478,22 @@ padding:3px;
 word-break:break-word;
 vertical-align:middle;
 }
-
+table th,
+table td{
+    white-space:nowrap;
+}
+  
 tr{
 page-break-inside:avoid;
 break-inside:avoid;
 }
 
-.activityCell{
+ .activityCell{
 font-size:9px;
 line-height:11px;
 word-break:break-word;
 }
-
+ 
 .header{
 margin-bottom:8px;
 font-size:11px;
@@ -716,10 +723,6 @@ Save SOB
 Reset Calculator
 </button>
 
-<button onclick="resetAllData()">
-Reset SOB IDs
-</button>
-
 <br>
 
 <button onclick="printA4()">
@@ -789,7 +792,16 @@ DATE : <span id="date"></span>
 <td id="grandT"><b>0</b></td>
 
 <td id="activityTotals" class="activityTotalsCell"></td>
-<td></td>
+<td style="text-align:center;">
+
+<button
+id="resetAllBtn"
+onclick="resetAllData()"
+style="font-size:10px;padding:4px 6px;margin:2px;background:#d32f2f;color:white;">
+Reset All
+</button>
+
+</td>
 
 </tr>
 
@@ -802,7 +814,7 @@ DATE : <span id="date"></span>
 </div>
 
 <div class="footer-left">
-26F16 | V3.3
+26G02 | V3.4
 </div>
 <div id="editModal" style="
 display:none;
@@ -1552,13 +1564,11 @@ tempDate.setHours(h);
 
 tempDate.setMinutes(m);
 
-let newTime =
-tempDate.toLocaleTimeString('en-US',{
-hour:'2-digit',
-minute:'2-digit',
-second:'2-digit',
-hour12:true
-});
+let hh = document.getElementById("editHour").value;
+let mm = document.getElementById("editMinute").value;
+let ap = document.getElementById("editAmPm").value;
+
+let newTime = `${hh}:${mm} ${ap}`;
 
 let comboSelect =
 document.getElementById("editCombo");
@@ -1674,7 +1684,11 @@ dataBody.innerHTML += `
 <td>
 <b>${d.sob}</b>
 <br>
-<span style="font-size:9px;white-space:nowrap;">
+<span style="
+font-size:9px;
+white-space:nowrap;
+display:inline-block;
+">
 (${d.comboName.match(/\d+\/(?:\d+|NA)/)?.[0] || ""})
 (${d.adults}.A + ${d.children}.C)
 </span>
