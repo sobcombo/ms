@@ -2,9 +2,9 @@
 <html>
 
 <head>
-<meta charset="UTF-8">
-<title>SOB coMboS calculator</title>
 
+<title>SOB coMboS calculator</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link
@@ -17,19 +17,32 @@ rel="stylesheet">
 font-family:'Arimo',sans-serif;
 box-sizing:border-box;
 }
-
 body{
+
 text-align:center;
 margin:0;
 padding:0;
 
 background:
+radial-gradient(
+circle at top left,
+#ffffff,
+transparent 40%
+),
+radial-gradient(
+circle at bottom right,
+#dfefff,
+transparent 35%
+),
 linear-gradient(
 180deg,
-#f8fbff,
-#eef3f9
+#f7fbff,
+#edf4fb
 );
+
 }
+
+
 .container{
 margin-top:20px;
 }
@@ -61,6 +74,12 @@ font-size:12px;
 font-weight:bold;
 display:inline-block;
 }
+
+.switch-btn:hover{
+transform:translate(-1px,-1px);
+filter:brightness(1.08);
+}
+
 .reverse-btn{
 
 background:linear-gradient(
@@ -89,10 +108,6 @@ box-shadow:
 
 }
 
-.switch-btn:hover{
-transform:translate(-1px,-1px);
-filter:brightness(1.08);
-}
 .deleteBtn{
 padding:2px 6px;
 font-size:11px;
@@ -101,7 +116,7 @@ margin:0;
 min-width:auto;
 }
 
-#a4{
+.a4{
 padding:8mm;
 box-sizing:border-box;
 overflow:hidden;
@@ -127,6 +142,7 @@ inset 2px 2px 5px rgba(0,0,0,.08),
 4px 4px 10px rgba(0,0,0,.12);
 
 }
+
 select{
 appearance:none;
 -webkit-appearance:none;
@@ -134,6 +150,7 @@ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 background-repeat:no-repeat;
 background-position:right 12px center;
 }
+
 .box{
 
 max-width:340px;
@@ -149,6 +166,7 @@ box-shadow:
 8px 8px 20px rgba(0,0,0,.12);
 
 }
+
 .row{
 display:flex;
 justify-content:space-between;
@@ -161,7 +179,7 @@ margin:6px;
 cursor:pointer;
 
 border:none;
-border-radius:14px;
+border-radius:28px;
 
 font-weight:bold;
 font-size:14px;
@@ -216,6 +234,59 @@ display:flex;
 justify-content:space-between;
 font-size:13px;
 margin-bottom:10px;
+align-items:center;
+gap:6px;
+flex-wrap:wrap;
+}
+
+.header-left,
+.header-center,
+.header-right{
+display:flex;
+align-items:center;
+gap:4px;
+min-width:0;
+flex:1 1 auto;
+}
+
+.header-center{
+justify-content:center;
+}
+
+.header-right{
+justify-content:flex-end;
+}
+
+.headerText{
+display:inline-block;
+white-space:nowrap;
+}
+
+.headerLine{
+display:inline-flex;
+align-items:flex-end;
+justify-content:center;
+
+height:16px;
+min-width:60px;
+max-width:110px;
+
+padding:0 4px;
+
+border-bottom:1.5px solid #000;
+
+font-weight:bold;
+
+vertical-align:bottom;
+
+line-height:16px;
+
+box-sizing:border-box;
+}
+
+#printArea .headerLine{
+min-width:50px;
+max-width:95px;
 }
 
 .activityRow{
@@ -223,15 +294,24 @@ background:#f5f5f5;
 font-size:11px;
 font-weight:bold;
 }
- 
- .activityCell {
-  text-align: left;
-  font-size: 10px;
-  font-weight: bold;
-  line-height: 14px;
-  padding: 5px 5px 5px 12px;
-  background: transparent;
+
+.activityCell{
+background:transparent;
+font-size:10px;
+font-weight:bold;
+text-align:left !important;
+padding:6px 6px 6px 12px;
+vertical-align:top;
+white-space:normal;
 }
+
+.activityCell pre{
+margin:0;
+font:inherit;
+white-space:pre-wrap;
+line-height:12px;
+}
+
 .activityTotalsCell {
   background: #eaeaea;
   font-size: 10px;
@@ -248,6 +328,7 @@ box-shadow:
 5px 6px 12px rgba(0,0,0,.25);
 
 }
+
 .editBtn:hover,
 .deleteBtn:hover{
 
@@ -258,12 +339,23 @@ box-shadow:
 7px 8px 16px rgba(0,0,0,.30);
 
 }
+
 .editBtn{
 padding:2px 6px;
 font-size:11px;
 line-height:1;
 margin:0;
 min-width:auto;
+}
+.box:hover{
+
+transform:translateY(-2px);
+
+box-shadow:
+12px 12px 28px rgba(0,0,0,.15);
+
+transition:.2s;
+
 }
 .footer-left{
 position:fixed;
@@ -284,56 +376,22 @@ font-size:12px;
 padding:10mm;
 box-sizing:border-box;
 }
+
 .editCard{
 background:#ffffff;
 max-width:360px;
 width:95%;
-max-height:90vh;
+max-height:85vh;
 overflow-y:auto;
 border:1px solid rgba(255,255,255,.8);
-
 backdrop-filter:blur(8px);
-margin:20px auto;
-padding:18px;
-
+margin:10px auto;
+padding:14px;
 border-radius:20px;
-
 box-shadow:
 10px 14px 40px rgba(0,0,0,.25),
 4px 6px 15px rgba(0,0,0,.15);
-
 animation:popIn .2s ease;
-}
-@media (max-width:480px){
-
-.editCard{
-max-height:85vh;
-padding:14px;
-margin:10px auto;
-}
-
-.editField{
-padding:10px;
-font-size:14px;
-}
-.editActions{
-position:sticky;
-bottom:0;
-background:white;
-padding-top:10px;
-}
-
-}
-
-@keyframes popIn{
-from{
-transform:scale(.9);
-opacity:0;
-}
-to{
-transform:scale(1);
-opacity:1;
-}
 }
 
 .editTitle{
@@ -352,12 +410,14 @@ border:2px solid #e0e0e0;
 font-size:15px;
 transition:.2s;
 }
+
 .timeField{
-    width:100%;
-    min-width:0;
-    margin:8px 0;
-    box-sizing:border-box;
+width:100%;
+min-width:0;
+margin:8px 0;
+box-sizing:border-box;
 }
+
 .editField:focus{
 outline:none;
 border-color:#1565c0;
@@ -369,53 +429,58 @@ display:flex;
 justify-content:center;
 gap:10px;
 margin-top:15px;
+position:sticky;
+bottom:0;
+background:white;
+padding-top:10px;
 }
 
 .saveBtn{
-
 background:linear-gradient(
 135deg,
-#00c853,
-#009624
+#1976d2,
+#0d47a1
 );
-
 color:white;
-
 box-shadow:
-4px 4px 0 #00701a,
+4px 4px 0 #0b3a82,
 6px 8px 14px rgba(0,0,0,.25);
-
 }
 
 .cancelBtn{
-
 background:linear-gradient(
 135deg,
 #ff5252,
 #d50000
 );
-
 color:white;
-
 box-shadow:
 4px 4px 0 #9b0000,
 6px 8px 14px rgba(0,0,0,.25);
-
 }
+
 .saveBtn,
 .cancelBtn{
-
 height:46px;
 min-width:120px;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 font-size:15px;
 font-weight:bold;
-
 }
+
+@keyframes popIn{
+from{
+transform:scale(.9);
+opacity:0;
+}
+to{
+transform:scale(1);
+opacity:1;
+}
+}
+
 @media print {
 
 @page{
@@ -446,7 +511,7 @@ display:none !important;
 .editColumn{
 display:none !important;
 }
-#resetAllBtn{
+tfoot button{
 display:none !important;
 }
 #printArea{
@@ -475,31 +540,45 @@ table-layout:auto;
 th,td{
 border:1px solid black;
 padding:3px;
-word-break:break-word;
+white-space:nowrap;
 vertical-align:middle;
 }
-table th,
-table td{
-    white-space:nowrap;
-}
-  
+
 tr{
 page-break-inside:avoid;
 break-inside:avoid;
 }
 
- .activityCell{
+.activityCell{
 font-size:9px;
 line-height:11px;
 word-break:break-word;
 }
- 
+
 .header{
 margin-bottom:8px;
 font-size:11px;
+gap:4px;
+flex-wrap:nowrap;
 }
+
+.header-left,
+.header-center,
+.header-right{
+gap:3px;
+}
+
+.headerLine{
+min-width:42px;
+max-width:85px;
+}
+
 .deleteColumn{
 display:none !important;
+}
+.activityTotalsCell,
+tfoot td{
+border:1px solid #000 !important;
 }
 
 }
@@ -524,7 +603,7 @@ table{
 }
 
 }
-.highlight-total{
+  .highlight-total{
     display:inline-block;
     padding:4px 10px;
     border:3px solid #ffd700;
@@ -546,6 +625,41 @@ table{
             0 0 35px #ff6f00;
     }
 }
+.userLoginBox{
+
+display:flex;
+justify-content:center;
+align-items:center;
+gap:8px;
+margin:12px auto;
+
+}
+
+.hiText{
+font-size:12px;
+font-weight:bold;
+}
+
+#usernameInput{
+
+width:140px;
+font-weight:bold;
+padding:7px 10px;
+font-size:12px;
+margin:0;
+
+}
+
+#loadBtn{
+display:inline-block;
+background:#1976d2;
+color:#fff;
+padding:7px 12px;
+font-size:12px;
+margin-left:4px;
+border-radius:100px;
+}
+
 </style>
 
 </head>
@@ -562,7 +676,7 @@ Reverse Combo Finder
 <a class="switch-btn report-btn"
 href="https://sobcombo.github.io/r/"
 target="_blank">
-Switch to Daily Report
+Daily Report Generator
 </a>
 
 </div>
@@ -570,6 +684,25 @@ Switch to Daily Report
 <h2>SOB coMboS calculator</h2>
 
 <div class="container">
+
+<div class="userLoginBox">
+
+<span class="hiText">Hi,</span>
+
+<input
+id="usernameInput"
+type="text"
+placeholder="Enter Username"
+autocomplete="off"
+>
+
+<button
+id="loadBtn"
+onclick="restoreTodayData()">
+Load
+</button>
+
+</div>
 
 <select id="combo" onchange="calc()">
 
@@ -640,7 +773,8 @@ Switch to Daily Report
 <br>
 
 <input
-type="number"
+type="tel"
+inputmode="numeric"
 id="adults"
 min="0"
 max="100"
@@ -657,7 +791,8 @@ calc();
 <br>
 
 <input
-type="number"
+type="tel"
+inputmode="numeric"
 id="children"
 min="0"
 max="100"
@@ -694,7 +829,7 @@ calc();
 
 <div class="row">
 <b style="font-size:14px;">TOTAL</b>
-  <span id="totalBox" class="highlight-total">
+<span id="totalBox" class="highlight-total">
     ₹ <span id="total">0</span>
   </span>
 </div>
@@ -707,26 +842,31 @@ calc();
 type="tel"
 id="sobInput"
 maxlength="6"
-inputmode="numeric"
 placeholder="Enter 6-digit SOB ID"
-oninput="this.value=this.value.replace(/[^0-9]/g,'');
-if(this.value.length>6)
-this.value=this.value.slice(0,6);">
+>
 
 <br>
 
-<button onclick="saveEntry()">
+<button
+onclick="saveEntry()"
+style="background:#1976d2;color:white;">
 Save SOB
 </button>
 
-<button onclick="resetForm()">
+<button
+onclick="resetForm()"
+style="background:#f57c00;color:white;">
 Reset Calculator
 </button>
 
 <br>
 
 <button onclick="printA4()">
-Print A4
+📄 Print A4
+</button>
+
+<button onclick="printAllA4()">
+📚 Print ALL
 </button>
 
 </div>
@@ -737,16 +877,19 @@ Print A4
 
 <div class="header">
 
-<div>
-POS# : __________
+<div class="header-left">
+<b class="headerText">POS# :</b>
+<span class="headerLine"></span>
 </div>
 
-<div>
-USERNA<b>M</b>E.<b>S</b> : ____________
+<div class="header-center">
+<span class="headerText">USERNA<b>M</b>E.<b>S</b> :</span>
+<span id="username" class="headerLine"></span>
 </div>
 
-<div>
-DATE : <span id="date"></span>
+<div class="header-right">
+<b class="headerText">DATE :</b>
+<span id="date"></span>
 </div>
 
 </div>
@@ -813,169 +956,124 @@ Reset All
 
 </div>
 
-<div class="footer-left">
-26G02 | V3.4
-</div>
-<div id="editModal" style="
-display:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.5);
-z-index:9999;
-">
-
+<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:9999;">
 <div class="editCard">
-
-<div class="editTitle">
-✏️ Edit SOB Entry
-</div>
-
-<div style="text-align:left;font-size:13px;font-weight:bold;">
-SOB ID
-</div>
-
-<input
-id="editSob"
-class="editField"
-type="tel"
-maxlength="6"
-inputmode="numeric"
-placeholder="SOB ID"
-oninput="
-this.value=this.value.replace(/[^0-9]/g,'');
-if(this.value.length>6)
-this.value=this.value.slice(0,6);
-">
+<div class="editTitle">✏️ Edit SOB Entry</div>
+<div style="text-align:left;font-size:13px;font-weight:bold;">SOB ID</div>
+<input id="editSob" class="editField" type="tel" maxlength="6" inputmode="numeric" placeholder="SOB ID" oninput="this.value=this.value.replace(/[^0-9]/g,'');if(this.value.length>6)this.value=this.value.slice(0,6);">
 <div style="display:flex;gap:8px;">
-
 <div style="flex:1;">
-<div style="text-align:left;font-size:13px;font-weight:bold;">
-Adults
+<div style="text-align:left;font-size:13px;font-weight:bold;">Adults</div>
+<input id="editAdults" class="editField" type="number" min="0" max="100" placeholder="Adults" oninput="this.value=this.value.replace(/[^0-9]/g,'');if(this.value>100)this.value=100;">
 </div>
-
-<input
-id="editAdults"
-class="editField"
-type="number"
-min="0"
-max="100"
-placeholder="Adults"
-oninput="
-this.value=this.value.replace(/[^0-9]/g,'');
-if(this.value>100)this.value=100;
-">
-</div>
-
 <div style="flex:1;">
-<div style="text-align:left;font-size:13px;font-weight:bold;">
-Children
+<div style="text-align:left;font-size:13px;font-weight:bold;">Children</div>
+<input id="editChildren" class="editField" type="number" min="0" max="100" placeholder="Children" oninput="this.value=this.value.replace(/[^0-9]/g,'');if(this.value>100)this.value=100;">
 </div>
-
-<input
-id="editChildren"
-class="editField"
-type="number"
-min="0"
-max="100"
-placeholder="Children"
-oninput="
-this.value=this.value.replace(/[^0-9]/g,'');
-if(this.value>100)this.value=100;
-">
 </div>
-
-</div>
-
-<div style="
-text-align:left;
-font-size:13px;
-font-weight:bold;
-">
-Combo Type
-</div>
-
+<div style="text-align:left;font-size:13px;font-weight:bold;">Combo Type</div>
 <select id="editCombo" class="editField"></select>
-
 <div style="display:flex;gap:8px;">
-
 <div style="flex:1;min-width:0;">
-<div style="text-align:left;font-size:13px;font-weight:bold;">
-Hour
-</div>
+<div style="text-align:left;font-size:13px;font-weight:bold;">Hour</div>
 <select id="editHour" class="editField timeField"></select>
 </div>
-
 <div style="flex:1;min-width:0;">
-<div style="text-align:left;font-size:13px;font-weight:bold;">
-Minute
-</div>
+<div style="text-align:left;font-size:13px;font-weight:bold;">Minute</div>
 <select id="editMinute" class="editField timeField"></select>
 </div>
-
 <div style="flex:1;min-width:0;">
-<div style="text-align:left;font-size:13px;font-weight:bold;">
-AM/PM
-</div>
+<div style="text-align:left;font-size:13px;font-weight:bold;">AM/PM</div>
 <select id="editAmPm" class="editField timeField">
 <option>AM</option>
 <option>PM</option>
 </select>
 </div>
-
 </div>
-
 <div class="editActions">
-
-<button class="saveBtn" onclick="saveEdit()">
-Save
-</button>
-
-<button class="cancelBtn" onclick="closeEditModal()">
-Cancel
-</button>
-
+<button class="saveBtn" onclick="saveEdit()">Save</button>
+<button class="cancelBtn" onclick="closeEditModal()">Cancel</button>
+</div>
 </div>
 </div>
 
+<div class="footer-left">
+26G10 | V4.4
 </div>
+
 <script>
+const APP_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbw_Vhlq9wHwMBBrY0gmzfLSObRzxR_ATE2jonce0aoO38O5xcjbzkG5I1sFhp61NvTQ/exec";
 
-let data =
-JSON.parse(localStorage.getItem("sobData")) || [];
+let data = JSON.parse(localStorage.getItem("sobData")) || [];
 let editingIndex = -1;
-const todayKey =
-new Date().toLocaleDateString('en-GB');
 
-const savedDate =
-localStorage.getItem("sobDate");
+const combo = document.getElementById("combo");
+const adults = document.getElementById("adults");
+const children = document.getElementById("children");
+const sobInput = document.getElementById("sobInput");
+const warning = document.getElementById("warning");
+const tpuEl = document.getElementById("tpu");
+const oeplEl = document.getElementById("oepl");
+const paeplEl = document.getElementById("paepl");
+const totalEl = document.getElementById("total");
+const dataBody = document.getElementById("dataBody");
+const grandT = document.getElementById("grandT");
+const tpuT = document.getElementById("tpuT");
+const oeplT = document.getElementById("oeplT");
+const paeplT = document.getElementById("paeplT");
+const activityTotals = document.getElementById("activityTotals");
+const usernameEl = document.getElementById("username");
+const posText = { innerText:"Restore" };
+const dateEl = document.getElementById("date");
+const editModal = document.getElementById("editModal");
+const editSob = document.getElementById("editSob");
+const editAdults = document.getElementById("editAdults");
+const editChildren = document.getElementById("editChildren");
+const editCombo = document.getElementById("editCombo");
+const editHour = document.getElementById("editHour");
+const editMinute = document.getElementById("editMinute");
+const editAmPm = document.getElementById("editAmPm");
+const todayKey = new Date().toLocaleDateString('en-GB');
+const savedDate = localStorage.getItem("sobDate");
 
 if(savedDate !== todayKey){
-
 data = [];
-
 localStorage.removeItem("sobData");
-
 localStorage.setItem("sobDate",todayKey);
-
 }
 
-const tpuEl =
-document.getElementById("tpu");
+function pad2(n){
+return String(n).padStart(2,"0");
+}
 
-const oeplEl =
-document.getElementById("oepl");
+function normalizeUsername(name){
+return (name || "").trim().toLowerCase();
+}
 
-const paeplEl =
-document.getElementById("paepl");
+function formatRestoredTime(t){
+let d = new Date(t);
+if(isNaN(d)) return t || "";
+let h = d.getHours();
+let m = pad2(d.getMinutes());
+let ampm = h >= 12 ? "PM" : "AM";
+h = h % 12 || 12;
+return `${h}:${m} ${ampm}`;
+}
 
-const totalEl =
-document.getElementById("total");
+function setEditTimeOptions(){
+editHour.innerHTML = "";
+for(let i=1;i<=12;i++){
+editHour.innerHTML += `<option value="${i}">${i}</option>`;
+}
+editMinute.innerHTML = "";
+for(let i=0;i<60;i++){
+let mm = pad2(i);
+editMinute.innerHTML += `<option value="${mm}">${mm}</option>`;
+}
+}
 
 function calc(){
-
 let v = combo.value;
 
 if(!v){
@@ -983,6 +1081,7 @@ if(!v){
     oeplEl.innerText = 0;
     paeplEl.innerText = 0;
     totalEl.innerText = 0;
+    warning.innerText = "";
     return;
 }
 
@@ -990,18 +1089,15 @@ let p = v.split(",");
 
 let ta = +p[0];
 let tc = +p[1];
-let o  = +p[2];
+let o = +p[2];
 let pi = +p[3];
 
 let na = p[4] === "NA";
 
-let a = Math.max(0,+document.getElementById("adults").value||0);
-let c = Math.max(0,+document.getElementById("children").value||0);
+let a = Math.max(0,+adults.value||0);
+let c = Math.max(0,+children.value||0);
 
-warning.innerText =
-(na && c>0)
-? "⚠ Children not allowed"
-: "";
+warning.innerText = (na && c>0) ? "⚠ Children not allowed" : "";
 
 let tpu = (a*ta) + (c*tc);
 let oepl = (a+c)*o;
@@ -1012,650 +1108,388 @@ tpuEl.innerText = tpu;
 oeplEl.innerText = oepl;
 paeplEl.innerText = paepl;
 totalEl.innerText = total;
-
 saveFormState();
-
-return {
-    tpu,
-    oepl,
-    paepl,
-    total
-};
+return { tpu, oepl, paepl, total };
 }
+
 function saveFormState(){
-
 localStorage.setItem("lastCombo", combo.value);
-
 localStorage.setItem("lastAdults", adults.value);
-
 localStorage.setItem("lastChildren", children.value);
-
 }
+
 function getVendorBreakup(comboName,pax){
-
 function line(items){
-
-return items
-.map(i => `${i.name}: ${i.price * pax}`)
-.join(" | ");
-
+return items.map(i => `${i.name}: ${i.price * pax}`).join(" | ");
 }
 
 if(comboName.includes("Snow Adventure")){
-
-return `
-OEPL → ${line([
-{name:"Snow",price:255}
-])}
-`;
-
+return `OEPL → ${line([{name:"Snow",price:255}])}`;
 }
-
 else if(comboName.includes("Adventure Combo")){
-
-return `
-PAEPL → ${line([
-{name:"Gamezone",price:227}
-])}
-`;
-
+return `PAEPL → ${line([{name:"Gamezone",price:227}])}`;
 }
-
 else if(comboName.includes("TU Explorer")){
-
-return `
-OEPL → ${line([
-{name:"Wax",price:70}
-])}
-<br>
-PAEPL → ${line([
-{name:"Eyelusion",price:70},
-{name:"WOG",price:80}
-])}
-`;
-
+return `OEPL → ${line([{name:"Wax",price:70}])}\nPAEPL → ${line([{name:"Eyelusion",price:70},{name:"WOG",price:80}])}`;
 }
-
 else if(comboName.includes("ECO FUN")){
-
-return `
-OEPL → ${line([
-{name:"Wax",price:28}
-])}
-<br>
-PAEPL → ${line([
-{name:"Mayalok",price:200}
-])}
-`;
-
+return `OEPL → ${line([{name:"Wax",price:28}])}\nPAEPL → ${line([{name:"Mayalok",price:200}])}`;
 }
-
 else if(comboName.includes("Aastha")){
-
-return `
-PAEPL → ${line([
-{name:"Gamezone",price:99}
-])}
-`;
-
+return `PAEPL → ${line([{name:"Gamezone",price:99}])}`;
 }
-
 else if(comboName.includes("Shiv Ganesha")){
-
-return `
-PAEPL → ${line([
-{name:"Eyelusion",price:50},
-{name:"Gamezone",price:50},
-{name:"WOG",price:75}
-])}
-`;
-
+return `PAEPL → ${line([{name:"Eyelusion",price:50},{name:"Gamezone",price:50},{name:"WOG",price:75}])}`;
 }
-
 else if(comboName.includes("Namah")){
-
-return `
-PAEPL → ${line([
-{name:"Gamezone",price:50}
-])}
-`;
-
+return `PAEPL → ${line([{name:"Gamezone",price:50}])}`;
 }
-
 else if(comboName.includes("Ultimate Play")){
-
-return `
-PAEPL → ${line([
-{name:"Gamezone",price:529}
-])}
-`;
-
+return `PAEPL → ${line([{name:"Gamezone",price:529}])}`;
 }
-
 else if(comboName.includes("Viewing Fun")){
-
-return `
-OEPL → ${line([
-{name:"Snow",price:225},
-{name:"Food",price:100}
-])}
-<br>
-PAEPL → ${line([
-{name:"Gamezone",price:50}
-])}
-`;
-
+return `OEPL → ${line([{name:"Snow",price:225},{name:"Food",price:100}])}\nPAEPL → ${line([{name:"Gamezone",price:50}])}`;
 }
-
 else if(comboName.includes("Symbolic")){
-
-return `
-OEPL → ${line([
-{name:"Snow",price:200},
-{name:"Wax",price:49}
-])}
-<br>
-PAEPL → ${line([
-{name:"Gamezone",price:100},
-{name:"WOG",price:70}
-])}
-`;
-
+return `OEPL → ${line([{name:"Snow",price:200},{name:"Wax",price:49}])}\nPAEPL → ${line([{name:"Gamezone",price:100},{name:"WOG",price:70}])}`;
 }
-
 else if(comboName.includes("Delight")){
-
-return `
-OEPL → ${line([
-{name:"Snow",price:200},
-{name:"Food",price:45},
-{name:"Souvenir",price:60},
-{name:"Wax",price:50}
-])}
-<br>
-PAEPL → ${line([
-{name:"Eyelusion",price:50},
-{name:"Mayalok",price:200},
-{name:"Gamezone",price:249},
-{name:"WOG",price:75}
-])}
-`;
-
+return `OEPL → ${line([{name:"Snow",price:200},{name:"Food",price:45},{name:"Souvenir",price:60},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:249},{name:"WOG",price:75}])}`;
 }
-
 else if(comboName.includes("Mini Blast")){
-
-return `
-OEPL → ${line([
-{name:"Snow",price:200},
-{name:"Food",price:45},
-{name:"Souvenir",price:60},
-{name:"Wax",price:50}
-])}
-<br>
-PAEPL → ${line([
-{name:"Eyelusion",price:50},
-{name:"Mayalok",price:200},
-{name:"Gamezone",price:249},
-{name:"WOG",price:75}
-])}
-`;
-
+return `OEPL → ${line([{name:"Snow",price:200},{name:"Food",price:45},{name:"Souvenir",price:60},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:249},{name:"WOG",price:75}])}`;
 }
-
 else if(comboName.includes("All in Fun")){
-
-return `
-OEPL → ${line([
-{name:"Snow",price:200},
-{name:"Wax",price:50}
-])}
-<br>
-PAEPL → ${line([
-{name:"Eyelusion",price:50},
-{name:"Mayalok",price:200},
-{name:"Gamezone",price:279},
-{name:"WOG",price:70}
-])}
-`;
-
+return `OEPL → ${line([{name:"Snow",price:200},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:279},{name:"WOG",price:70}])}`;
 }
-
 else if(comboName.includes("Divine Rush")){
-
-return `
-PAEPL → ${line([
-{name:"Gamezone",price:100},
-{name:"WOG",price:50}
-])}
-`;
-
+return `PAEPL → ${line([{name:"Gamezone",price:100},{name:"WOG",price:50}])}`;
 }
-
 else if(comboName.includes("Ultimate Mega")){
-
-return `
-OEPL → ${line([
-{name:"Snow",price:150},
-{name:"Food",price:99},
-{name:"Souvenir",price:100},
-{name:"Wax",price:100}
-])}
-<br>
-PAEPL → ${line([
-{name:"Eyelusion",price:50},
-{name:"Mayalok",price:150},
-{name:"Gamezone",price:2100},
-{name:"WOG",price:50}
-])}
-`;
-
+return `OEPL → ${line([{name:"Snow",price:150},{name:"Food",price:99},{name:"Souvenir",price:100},{name:"Wax",price:100}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:150},{name:"Gamezone",price:2100},{name:"WOG",price:50}])}`;
 }
 
 return "-";
+}
+async function restoreTodayData(){
+
+let username = usernameInput.value.trim();
+
+if(!username){
+alert("Enter Username first.");
+return;
+}
+
+posText.innerText = "Restore";
+
+let posVal = posText.innerText.trim();
+let userVal =
+usernameInput.value.trim();
+if(!/^restore$/i.test(posVal)) return;
+
+let userKey = normalizeUsername(userVal);
+const today = new Date().toLocaleDateString("en-GB");
+const url=
+APP_SCRIPT_URL+
+"?date="+
+encodeURIComponent(today)+
+"&displayName="+
+encodeURIComponent(username);
+const res = await fetch(url);
+const rows = await res.json();
+
+const originalData = [...data];
+const originalUser = usernameEl.innerText;
+
+if(rows.length==0){
+
+alert("No data found.");
+
+return;
+
+}
+
+data = rows;
+
+if(rows[0].displayName){
+
+usernameInput.value =
+rows[0].displayName;
+
+}
+
+localStorage.setItem("sobData",JSON.stringify(data));
+render();
 
 }
 
 function saveEntry(){
+let raw = sobInput.value.trim();
+let username =
+usernameInput.value.trim();
 
-let raw =
-sobInput.value.trim();
+localStorage.setItem(
+"username",
+username
+);
+let usernameKey = normalizeUsername(username);
 
 if(!/^[1-9][0-9]{5}$/.test(raw)){
-
-alert(
-"Enter valid 6-digit SOB ID"
-);
-
+alert("Enter valid 6-digit SOB ID");
 return;
-
 }
 
-let sob =
-"SOB000" + raw;
+let sob = "SOB000" + raw;
 
 if(data.some(d => d.sob === sob)){
-
-alert(
-"This SOB ID already exists"
-);
-
-return;
-
-}
-
-let r = calc();
-
-if(!r) return;
-
-let pax =
-(+adults.value || 0) +
-(+children.value || 0);
-
-if(pax <= 0){
-alert("Enter at least 1 Adult or Child");
-return;
-}
-let comboParts = combo.value.split(",");
-
-if(comboParts[4] === "NA" &&
-(+children.value || 0) > 0){
-
-alert("Children are not allowed in this combo");
-
-}
-let comboName =
-combo.options[
-combo.selectedIndex
-].text;
-
-let breakup =
-getVendorBreakup(comboName,pax);
-
-data.push({
-
-sob,
-...r,
-
-comboName,
-
-adults:
-(+adults.value || 0),
-
-children:
-(+children.value || 0),
-
-breakup,
-
-time:
-new Date().toLocaleTimeString('en-US',{
-hour:'2-digit',
-minute:'2-digit',
-second:'2-digit',
-hour12:true
-})
-
-});
-
-localStorage.setItem(
-"sobData",
-JSON.stringify(data)
-);
-
-render();
-
-sobInput.value = "";
-
-adults.value = "";
-children.value = "";
-
-combo.selectedIndex = 0;
-
-localStorage.removeItem("lastCombo");
-localStorage.removeItem("lastAdults");
-localStorage.removeItem("lastChildren");
-
-tpuEl.innerText = 0;
-oeplEl.innerText = 0;
-paeplEl.innerText = 0;
-totalEl.innerText = 0;
-
-warning.innerText = "";
-
-}
-
-function resetForm(){
-
-combo.selectedIndex = 0;
-
-adults.value = "";
-children.value = "";
-sobInput.value = "";
-localStorage.removeItem("lastCombo");
-
-localStorage.removeItem("lastAdults");
-
-localStorage.removeItem("lastChildren");
-tpuEl.innerText = 0;
-oeplEl.innerText = 0;
-paeplEl.innerText = 0;
-totalEl.innerText = 0;
-
-warning.innerText = "";
-
-}
-
-function resetAllData(){
-
-if(
-!confirm(
-"Delete all saved SOB IDs?"
-)
-) return;
-
-data = [];
-
-localStorage.removeItem(
-"sobData"
-);
-
-render();
-
-}
-
-function deleteEntry(index){
-
-if(
-!confirm("Delete this SOB ID?")
-) return;
-
-data.splice(index,1);
-
-localStorage.setItem(
-"sobData",
-JSON.stringify(data)
-);
-
-render();
-
-}
-
-function editEntry(index){
-
-editingIndex = index;
-
-let d = data[index];
-
-document.getElementById("editSob").value =
-d.sob.replace("SOB000","");
-document.getElementById("editSob")
-.setAttribute("maxlength","6");
-document.getElementById("editAdults").value =
-d.adults;
-
-document.getElementById("editChildren").value =
-d.children;
-
-let parts =
-d.time.match(/(\d+):(\d+):(\d+)\s?(AM|PM)?/i);
-
-if(parts){
-
-let hrs12 = parseInt(parts[1]);
-let mins = parts[2];
-let ampm = parts[4] || "AM";
-
-document.getElementById("editHour").value =
-hrs12;
-
-document.getElementById("editMinute").value =
-mins;
-
-document.getElementById("editAmPm").value =
-ampm.toUpperCase();
-
-}
-
-let comboSelect =
-document.getElementById("editCombo");
-
-comboSelect.innerHTML = "";
-
-Array.from(combo.options)
-.slice(1)
-.forEach(opt=>{
-
-let o =
-document.createElement("option");
-
-o.value = opt.value;
-o.textContent = opt.text;
-
-if(opt.text === d.comboName){
-o.selected = true;
-}
-
-comboSelect.appendChild(o);
-
-});
-
-document.getElementById("editModal").style.display =
-"block";
-
-document.getElementById("editSob").focus();
-
-}
-
-function closeEditModal(){
-
-document.getElementById("editModal").style.display =
-"none";
-
-editingIndex = -1;
-
-}
-
-function saveEdit(){
-
-let d = data[editingIndex];
-
-let newSob =
-document.getElementById("editSob").value.trim();
-let fullSob = "SOB000" + newSob;
-
-if(
-data.some((item,index)=>
-index !== editingIndex &&
-item.sob === fullSob
-)
-){
 alert("This SOB ID already exists");
 return;
 }
-if(!/^[1-9][0-9]{5}$/.test(newSob)){
-alert("Invalid SOB ID");
+
+let r = calc();
+if(!r) return;
+
+let pax = (+adults.value || 0) + (+children.value || 0);
+let comboName = combo.options[combo.selectedIndex].text;
+let breakup = getVendorBreakup(comboName,pax);
+
+data.push({
+    deviceId,
+displayName:username,
+sob,
+...r,
+comboName,
+adults:(+adults.value || 0),
+children:(+children.value || 0),
+breakup,
+time:new Date().toLocaleTimeString([],{
+hour:"numeric",
+minute:"2-digit",
+hour12:true
+})
+});
+
+fetch(APP_SCRIPT_URL,{
+method:"POST",
+headers:{
+"Content-Type":"text/plain"
+},
+body:JSON.stringify({
+
+date:new Date().toLocaleDateString("en-GB"),
+
+deviceId:deviceId,
+
+displayName:username,
+
+sob:sob,
+
+comboName:comboName,
+
+adults:+adults.value||0,
+
+children:+children.value||0,
+
+tpu:r.tpu,
+
+oepl:r.oepl,
+
+paepl:r.paepl,
+
+total:r.total,
+
+breakup:breakup,
+
+time:new Date().toLocaleTimeString([],{
+hour:"numeric",
+minute:"2-digit",
+hour12:true
+})
+
+})
+})
+.then(r => r.json())
+.then(res => {
+
+    if(res.status === "duplicate"){
+
+        alert(
+            res.sob +
+            " is already saved by " +
+            res.displayName
+        );
+
+        // remove locally added entry
+        data.pop();
+        render();
+
+        return;
+    }
+
+    if(res.status !== "success"){
+
+        alert(res.message || "Unable to save.");
+        data.pop();
+        render();
+        return;
+    }
+
+})
+.catch(err=>{
+
+    data.pop();
+    render();
+
+    alert("Unable to connect to server.");
+    console.error(err);
+
+});
+
+localStorage.setItem("sobData",JSON.stringify(data));
+localStorage.setItem("sobDataBackup",JSON.stringify(data));
+localStorage.setItem("username",username);
+localStorage.setItem("usernameKey",usernameKey);
+render();
+sobInput.value = "";
+}
+
+function resetForm(){
+combo.selectedIndex = 0;
+adults.value = "";
+children.value = "";
+sobInput.value = "";
+localStorage.removeItem("lastCombo");
+localStorage.removeItem("lastAdults");
+localStorage.removeItem("lastChildren");
+tpuEl.innerText = 0;
+oeplEl.innerText = 0;
+paeplEl.innerText = 0;
+totalEl.innerText = 0;
+warning.innerText = "";
+}
+
+function resetAllData(){
+if(!confirm("Delete all saved SOB IDs?")) return;
+localStorage.setItem("sobDataBackup",JSON.stringify(data));
+data = [];
+localStorage.removeItem("sobData");
+render();
+}
+
+function deleteEntry(index){
+if(!confirm("Delete this SOB ID?")) return;
+data.splice(index,1);
+localStorage.setItem("sobData",JSON.stringify(data));
+localStorage.setItem("sobDataBackup",JSON.stringify(data));
+render();
+}
+
+function openEditModal(index){
+editingIndex = index;
+let d = data[index];
+
+editSob.value = d.sob.replace("SOB000","");
+editAdults.value = d.adults;
+editChildren.value = d.children;
+
+editCombo.innerHTML = "";
+Array.from(combo.options).slice(1).forEach(opt=>{
+let o = document.createElement("option");
+o.value = opt.value;
+o.textContent = opt.text;
+if(opt.text === d.comboName) o.selected = true;
+editCombo.appendChild(o);
+});
+
+setEditTimeOptions();
+
+let tm = (d.time || "").match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);
+if(tm){
+editHour.value = String(parseInt(tm[1]));
+editMinute.value = tm[2];
+editAmPm.value = tm[3].toUpperCase();
+} else {
+let now = new Date();
+let h = now.getHours();
+let ampm = h >= 12 ? "PM" : "AM";
+h = h % 12 || 12;
+editHour.value = String(h);
+editMinute.value = pad2(now.getMinutes());
+editAmPm.value = ampm;
+}
+
+editModal.style.display = "block";
+}
+
+function closeEditModal(){
+editModal.style.display = "none";
+editingIndex = -1;
+}
+
+function saveEdit(){
+if(editingIndex < 0) return;
+
+let raw = editSob.value.trim();
+if(!/^[0-9]{6}$/.test(raw)){
+alert("Enter valid 6-digit SOB ID");
 return;
 }
 
-let adultsCount =
-+document.getElementById("editAdults").value || 0;
-
-let childrenCount =
-+document.getElementById("editChildren").value || 0;
-
-// Force limits
-adultsCount = Math.min(100, Math.max(0, adultsCount));
-childrenCount = Math.min(100, Math.max(0, childrenCount));
-
-document.getElementById("editAdults").value = adultsCount;
-document.getElementById("editChildren").value = childrenCount;
-
-if(adultsCount > 100 || childrenCount > 100){
-
-    alert("Maximum 100 allowed");
-
-    return;
-
-}
-
-if(adultsCount + childrenCount <= 0){
-alert("Enter at least 1 Adult or Child");
+let sob = "SOB000" + raw;
+if(data.some((d,i) => i !== editingIndex && d.sob === sob)){
+alert("This SOB ID already exists");
 return;
 }
 
-let h =
-parseInt(document.getElementById("editHour").value);
+let comboValue = editCombo.value;
+let comboText = editCombo.options[editCombo.selectedIndex]?.text || "";
+let tempCombo = combo.value;
+let tempAdults = adults.value;
+let tempChildren = children.value;
 
-let m =
-parseInt(document.getElementById("editMinute").value);
+combo.value = comboValue;
+adults.value = editAdults.value;
+children.value = editChildren.value;
+let r = calc();
 
-let ampm =
-document.getElementById("editAmPm").value;
+combo.value = tempCombo;
+adults.value = tempAdults;
+children.value = tempChildren;
+calc();
 
-if(ampm === "PM" && h !== 12)
-h += 12;
+if(!r) return;
 
-if(ampm === "AM" && h === 12)
-h = 0;
-
-let tempDate = new Date();
-
-tempDate.setHours(h);
-
-tempDate.setMinutes(m);
-
-let hh = document.getElementById("editHour").value;
-let mm = document.getElementById("editMinute").value;
-let ap = document.getElementById("editAmPm").value;
-
-let newTime = `${hh}:${mm} ${ap}`;
-
-let comboSelect =
-document.getElementById("editCombo");
-
-let selectedOption =
-comboSelect.options[
-comboSelect.selectedIndex
-];
-
-let comboValue =
-selectedOption.value.split(",");
-
-if(comboValue[4] === "NA" && childrenCount > 0){
-alert("Children are not allowed in this combo");
-}
-
-let ta = +comboValue[0];
-let tc = +comboValue[1];
-let oepl = +comboValue[2];
-let paepl = +comboValue[3];
-
-let tpu =
-(adultsCount * ta) +
-(childrenCount * tc);
-
-let oeplAmt =
-(adultsCount + childrenCount) * oepl;
-
-let paeplAmt =
-(adultsCount + childrenCount) * paepl;
-
-let total =
-tpu + oeplAmt + paeplAmt;
-
-let pax =
-adultsCount + childrenCount;
+let pax = (+editAdults.value || 0) + (+editChildren.value || 0);
+let breakup = getVendorBreakup(comboText, pax);
 
 data[editingIndex] = {
-
-...d,
-
-sob:fullSob,
-
-comboName:selectedOption.text,
-
-adults:adultsCount,
-
-children:childrenCount,
-
-tpu:tpu,
-
-oepl:oeplAmt,
-
-paepl:paeplAmt,
-
-total:total,
-
-breakup:getVendorBreakup(
-selectedOption.text,
-pax
-),
-
-time:newTime
-
+...data[editingIndex],
+sob,
+comboName: comboText,
+adults: (+editAdults.value || 0),
+children: (+editChildren.value || 0),
+tpu: r.tpu,
+oepl: r.oepl,
+paepl: r.paepl,
+total: r.total,
+breakup,
+time: `${editHour.value}:${editMinute.value} ${editAmPm.value}`
 };
 
-localStorage.setItem(
-"sobData",
-JSON.stringify(data)
-);
-
-closeEditModal();
-
+localStorage.setItem("sobData",JSON.stringify(data));
 render();
+closeEditModal();
+}
 
-} 
+function editEntry(index){
+openEditModal(index);
+}
+
+function formatTime(t){
+return t;
+}
+
 function render(){
-
-data.sort((a,b)=>
-parseInt(a.sob.replace("SOB000","")) -
-parseInt(b.sob.replace("SOB000",""))
-);
-
-localStorage.setItem(
-"sobData",
-JSON.stringify(data)
-);
 dataBody.innerHTML = "";
 
 let totalAll = 0;
@@ -1666,17 +1500,14 @@ let oeplActivities = {};
 let paeplActivities = {};
 
 data.forEach((d,i)=>{
-
 dataBody.innerHTML += `
-
 <tr>
-
 <td class="editColumn">
 <button class="editBtn" onclick="editEntry(${i})">✏️</button>
 </td>
 
 <td class="deleteColumn">
-<button class="deleteBtn" onclick="deleteEntry(${i})">X</button>
+<button class="deleteBtn" onclick="deleteEntry(${i})">🗑️</button>
 </td>
 
 <td>${i+1}</td>
@@ -1684,13 +1515,9 @@ dataBody.innerHTML += `
 <td>
 <b>${d.sob}</b>
 <br>
-<span style="
-font-size:9px;
-white-space:nowrap;
-display:inline-block;
-">
-(${d.comboName.match(/\d+\/(?:\d+|NA)/)?.[0] || ""})
-(${d.adults}.A + ${d.children}.C)
+<span style="font-size:9px;white-space:nowrap;">
+(${((d.comboName||"")).match(/\d+\/(?:\d+|NA)/)?.[0] || ""})
+(${d.adults} A + ${d.children} C)
 </span>
 </td>
 
@@ -1700,15 +1527,13 @@ display:inline-block;
 <td>${d.total}</td>
 
 <td class="activityCell">
-${d.breakup}
+<pre>${d.breakup}</pre>
 </td>
 
 <td style="font-size:10px;">
 ${formatTime(d.time)}
 </td>
-
 </tr>
-
 `;
 
 tpuSum += d.tpu;
@@ -1716,185 +1541,265 @@ oeplSum += d.oepl;
 paeplSum += d.paepl;
 totalAll += d.total;
 
-// Activity totals calculation
-
 let tempDiv = document.createElement("div");
 tempDiv.innerHTML = d.breakup;
-
-let text = tempDiv.innerHTML
-.replace(/<br\s*\/?>/gi,"\n")
-.split("\n")
-.map(x=>x.trim())
-.filter(x=>x);
+let text = tempDiv.innerText.split("\n");
 
 text.forEach(line => {
-
 line = line.trim();
 
 if(line.startsWith("OEPL")){
-
 let activities = line.replace("OEPL →","").split("|");
-
 activities.forEach(a=>{
-
 let parts = a.split(":");
-
 if(parts.length < 2) return;
-
 let name = parts[0].trim();
-
 let value = parseInt(parts[1]) || 0;
-
-oeplActivities[name] =
-(oeplActivities[name] || 0) + value;
-
+oeplActivities[name] = (oeplActivities[name] || 0) + value;
 });
-
 }
 
 if(line.startsWith("PAEPL")){
-
 let activities = line.replace("PAEPL →","").split("|");
-
 activities.forEach(a=>{
-
 let parts = a.split(":");
-
 if(parts.length < 2) return;
-
 let name = parts[0].trim();
-
 let value = parseInt(parts[1]) || 0;
-
-paeplActivities[name] =
-(paeplActivities[name] || 0) + value;
-
+paeplActivities[name] = (paeplActivities[name] || 0) + value;
 });
-
 }
-
 });
-
 });
-
-
-function formatTime(t){
-
-let parts =
-t.match(/(\d+):(\d+):(\d+)\s?(AM|PM)?/i);
-
-if(!parts) return t;
-
-let h = parts[1];
-let m = parts[2];
-let ampm = parts[4] || "";
-
-return `${h}:${m} ${ampm}`.trim();
-
-}
 
 function formatActivities(obj){
-
-return Object.entries(obj)
-.map(([k,v]) => `${k}: ${v}`)
-.join(" | ");
-
+return Object.entries(obj).map(([k,v]) => `${k}: ${v}`).join(" | ");
 }
 
-document.getElementById("grandT").innerHTML =
-"<b>" + totalAll + "</b>";
+grandT.innerHTML = "<b>" + totalAll + "</b>";
+tpuT.innerHTML = "<b>" + tpuSum + "</b>";
+oeplT.innerHTML = "<b>" + oeplSum + "</b>";
+paeplT.innerHTML = "<b>" + paeplSum + "</b>";
 
-document.getElementById("tpuT").innerHTML =
-"<b>" + tpuSum + "</b>";
-
-document.getElementById("oeplT").innerHTML =
-"<b>" + oeplSum + "</b>";
-
-document.getElementById("paeplT").innerHTML =
-"<b>" + paeplSum + "</b>";
-
-document.getElementById("activityTotals").innerHTML = `
-OEPL → ${formatActivities(oeplActivities)}
-<br>
-PAEPL → ${formatActivities(paeplActivities)}
-`;
+activityTotals.innerHTML =
+"<u>OEPL</u> → "+formatActivities(oeplActivities)+
+"<br>"+
+"<u>PAEPL</u> → "+formatActivities(paeplActivities);
 
 }
 
 function printA4(){
-
 window.print();
+}
+
+async function printAllA4(){
+
+try{
+
+const originalData = [...data];
+const originalUser = usernameEl.innerText;
+
+const today = new Date().toLocaleDateString("en-GB");
+
+const res = await fetch(
+APP_SCRIPT_URL +
+"?date=" + encodeURIComponent(today) +
+"&all=true"
+);
+
+const rows = await res.json();
+
+if(!rows.length){
+alert("No entries found.");
+return;
+}
+
+let grouped = {};
+
+rows.forEach(r=>{
+
+const key = (r.displayName || "Unknown").trim().toLowerCase();
+
+if(!grouped[key]){
+grouped[key]={
+name:(r.displayName || "Unknown").trim(),
+rows:[]
+};
+}
+
+grouped[key].rows.push(r);
+
+});
+
+let html="";
+
+for(const group of Object.values(grouped)){
+
+data = group.rows;
+usernameEl.innerText = group.name;
+
+render();
+
+html += `
+<div class="a4Page">
+${document.getElementById("printArea").innerHTML}
+<hr style="border:1px dashed #999;margin:6px 0;">
+</div>
+`;
+
+}
+
+data = originalData;
+usernameEl.innerText = originalUser;
+render();
+
+const win = window.open("", "_blank");
+
+if(!win){
+
+alert("Popup blocked.\nPlease allow popups for this website.");
+
+return;
+
+}
+
+win.document.open();
+
+win.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<title>Print All</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+${document.querySelector("style").innerHTML}
+
+body{
+margin:0;
+padding:0;
+font-family:'Arimo',sans-serif;
+}
+
+.a4Page{
+margin:0 0 8px 0;
+padding:0;
+page-break-inside:avoid;
+break-inside:avoid;
+}
+
+.editColumn,
+.deleteColumn,
+.editBtn,
+.deleteBtn,
+#resetAllBtn{
+display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+${html}
+
+</body>
+
+</html>
+`);
+
+win.document.close();
+
+win.onload = function(){
+
+setTimeout(function(){
+
+win.focus();
+
+win.print();
+
+},300);
+
+};
+
+}catch(err){
+
+console.error(err);
+
+alert("Unable to print all.");
+
+}
 
 }
 
 function setDate(){
-
-const today =
-new Date().toLocaleDateString('en-GB');
-
-document.getElementById("date").innerText =
-today;
-
+const today = new Date().toLocaleDateString('en-GB');
+dateEl.innerText = today;
 }
+
 function restoreFormState(){
-
-combo.value =
-localStorage.getItem("lastCombo") || "";
-
-adults.value =
-localStorage.getItem("lastAdults") || "";
-
-children.value =
-localStorage.getItem("lastChildren") || "";
+combo.value = localStorage.getItem("lastCombo") || "";
+adults.value = localStorage.getItem("lastAdults") || "";
+children.value = localStorage.getItem("lastChildren") || "";
 
 if(combo.value){
 calc();
 }
-
 }
 
-let hours =
-[10,11,12,1,2,3,4,5,6,7,8,9];
-
-hours.forEach(h=>{
-
-document.getElementById("editHour").innerHTML +=
-`<option value="${h}">${h}</option>`;
-
-});
-
-for(let m=0; m<60; m++){
-
-let mm = String(m).padStart(2,"0");
-
-document.getElementById("editMinute").innerHTML +=
-`<option value="${mm}">${mm}</option>`;
-
-}
-
-
-document.getElementById("editHour")
-.addEventListener("change",function(){
-
-let h = parseInt(this.value);
-
-if(h >= 10 && h <= 11){
-
-editAmPm.value = "AM";
-
-}else if(h === 12 || h <= 9){
-
-editAmPm.value = "PM";
-
-}
-
-});
-
-window.addEventListener("beforeprint", () => {
-    render();
-});
-
+setEditTimeOptions();
 restoreFormState();
+
+let deviceId = localStorage.getItem("deviceId");
+
+if(!deviceId){
+
+    deviceId =
+    "DEV-" +
+    Date.now().toString(36) +
+    "-" +
+    Math.random().toString(36).substring(2,8).toUpperCase();
+
+    localStorage.setItem("deviceId",deviceId);
+
+}
+let savedUsername = localStorage.getItem("username");
+
+if(!savedUsername){
+
+    while(true){
+
+        savedUsername = prompt(
+            "Welcome!\n\nPlease enter your username:"
+        );
+
+        if(savedUsername){
+
+            savedUsername = savedUsername.trim();
+
+            if(savedUsername.length){
+
+                localStorage.setItem(
+                    "username",
+                    savedUsername
+                );
+
+                break;
+            }
+        }
+
+        alert("Username is required.");
+    }
+
+}
+
+usernameInput.value = savedUsername;
 setDate();
 render();
 
