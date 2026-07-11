@@ -57,6 +57,7 @@ filter:brightness(1.08);
 background:linear-gradient(135deg,#00c853,#009624);
 box-shadow:3px 3px 0 #00701a,5px 6px 10px rgba(0,0,0,.18);
 }
+
 .sobField{
 width:90%;
 max-width:340px;
@@ -107,6 +108,7 @@ width:22px;
 height:22px;
 fill:#222;
 }
+
 .report-btn{
 background:linear-gradient(135deg,#8e24aa,#5e35b1);
 box-shadow:3px 3px 0 #4527a0,5px 6px 10px rgba(0,0,0,.18);
@@ -600,7 +602,6 @@ display:inline-block;
 background:linear-gradient(135deg,#1976d2,#0d47a1);
 box-shadow:4px 4px 0 #0b3a82,6px 8px 14px rgba(0,0,0,.18);
 color:white;
-color:#fff;
 padding:5px 10px;
 font-size:12px;
 margin-left:4px;
@@ -620,6 +621,38 @@ backdrop-filter:blur(4px);
 display:flex;
 align-items:center;
 justify-content:center;
+}
+
+.scannerOverlay{
+display:none;
+position:fixed;
+inset:0;
+z-index:99999;
+background:rgba(0,0,0,.9);
+padding:16px;
+}
+
+.scannerOverlay.show{
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.scannerBox{
+width:100%;
+max-width:420px;
+background:#111;
+border-radius:16px;
+padding:12px;
+box-shadow:0 10px 30px rgba(0,0,0,.45);
+}
+
+#reader{
+width:100%;
+}
+
+#reader video{
+border-radius:12px;
 }
 
 </style>
@@ -683,9 +716,10 @@ justify-content:center;
 <br>
 
 <div class="sobField">
-
 <input
 id="sobInput"
+type="tel"
+inputmode="numeric"
 maxlength="6"
 placeholder="Enter 6-digit SOB ID"
 autocomplete="off">
@@ -696,23 +730,16 @@ type="button"
 onclick="startScanner()">
 
 <svg viewBox="0 0 24 24">
-
 <path d="M9 4L7.5 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.5L15 4H9zm3 4a5 5 0 1 1 0 10a5 5 0 0 1 0-10zm0 2.2a2.8 2.8 0 1 0 0 5.6a2.8 2.8 0 0 0 0-5.6z"/>
-
 </svg>
 
 </button>
-
 </div>
 
 <br>
 
-<button onclick="saveEntry()" style="background:linear-gradient(135deg,#1976d2,#0d47a1);
-box-shadow:4px 4px 0 #0b3a82,6px 8px 14px rgba(0,0,0,.18);
-color:white;color:white;">Save SOB</button>
-<button onclick="resetForm()" style="background:linear-gradient(135deg,#ff9800,#ef6c00);
-box-shadow:4px 4px 0 #c43e00,6px 8px 14px rgba(0,0,0,.18);
-color:white;color:white;">Reset Calculator</button>
+<button onclick="saveEntry()" style="background:linear-gradient(135deg,#1976d2,#0d47a1);box-shadow:4px 4px 0 #0b3a82,6px 8px 14px rgba(0,0,0,.18);color:white;">Save SOB</button>
+<button onclick="resetForm()" style="background:linear-gradient(135deg,#ff9800,#ef6c00);box-shadow:4px 4px 0 #c43e00,6px 8px 14px rgba(0,0,0,.18);color:white;">Reset Calculator</button>
 
 <br>
 
@@ -826,26 +853,21 @@ color:white;color:white;">Reset Calculator</button>
 </div>
 
 <div class="footer-left">26G11 | V4.5</div>
-<div
-id="reader"
-style="
-display:none;
 
-position:fixed;
-
-inset:0;
-
-background:rgba(0,0,0,.88);
-
-z-index:99999;
-
-padding:20px;
-">
+<div id="scannerOverlay" class="scannerOverlay">
+<div class="scannerBox">
+<div style="text-align:right">
+<button onclick="closeScanner()" style="background:white;color:black;padding:8px 15px;margin-bottom:10px;">✕ Close</button>
 </div>
+<div id="reader"></div>
+</div>
+</div>
+
 <script>
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_Vhlq9wHwMBBrY0gmzfLSObRzxR_ATE2jonce0aoO38O5xcjbzkG5I1sFhp61NvTQ/exec";
 let data = JSON.parse(localStorage.getItem("sobData")) || [];
 let editingIndex = -1;
+let qrScanner = null;
 
 const combo = document.getElementById("combo");
 const adults = document.getElementById("adults");
@@ -863,7 +885,6 @@ const oeplT = document.getElementById("oeplT");
 const paeplT = document.getElementById("paeplT");
 const activityTotals = document.getElementById("activityTotals");
 const usernameEl = document.getElementById("username");
-const posText = { innerText:"Restore" };
 const dateEl = document.getElementById("date");
 const editModal = document.getElementById("editModal");
 const editSob = document.getElementById("editSob");
@@ -875,7 +896,9 @@ const editMinute = document.getElementById("editMinute");
 const editAmPm = document.getElementById("editAmPm");
 const loginModal = document.getElementById("loginModal");
 const loginUsername = document.getElementById("loginUsername");
-const todayKey = new Date().toLocaleDateString('en-GB');
+const scannerOverlay = document.getElementById("scannerOverlay");
+
+const todayKey = new Date().toLocaleDateString("en-GB");
 const savedDate = localStorage.getItem("sobDate");
 
 if(savedDate !== todayKey){
@@ -884,14 +907,22 @@ localStorage.removeItem("sobData");
 localStorage.setItem("sobDate",todayKey);
 }
 
-function pad2(n){ return String(n).padStart(2,"0"); }
-function normalizeUsername(name){ return (name || "").trim().toLowerCase(); }
+function pad2(n){
+return String(n).padStart(2,"0");
+}
+
+function normalizeUsername(name){
+return (name || "").trim().toLowerCase();
+}
 
 function setEditTimeOptions(){
 editHour.innerHTML = "";
-for(let i=1;i<=12;i++) editHour.innerHTML += `<option value="${i}">${i}</option>`;
+for(let i = 1; i <= 12; i++){
+editHour.innerHTML += `<option value="${i}">${i}</option>`;
+}
+
 editMinute.innerHTML = "";
-for(let i=0;i<60;i++){
+for(let i = 0; i < 60; i++){
 let mm = pad2(i);
 editMinute.innerHTML += `<option value="${mm}">${mm}</option>`;
 }
@@ -907,64 +938,73 @@ totalEl.innerText = 0;
 warning.innerText = "";
 return;
 }
+
 let p = v.split(",");
 let ta = +p[0], tc = +p[1], o = +p[2], pi = +p[3];
 let na = p[4] === "NA";
-let a = Math.max(0,+adults.value||0);
-let c = Math.max(0,+children.value||0);
-warning.innerText = (na && c>0) ? "⚠ Children not allowed" : "";
-let tpu = (a*ta) + (c*tc);
-let oepl = (a+c)*o;
-let paepl = (a+c)*pi;
+let a = Math.max(0, +adults.value || 0);
+let c = Math.max(0, +children.value || 0);
+
+warning.innerText = (na && c > 0) ? "⚠ Children not allowed" : "";
+
+let tpu = (a * ta) + (c * tc);
+let oepl = (a + c) * o;
+let paepl = (a + c) * pi;
 let total = tpu + oepl + paepl;
+
 tpuEl.innerText = tpu;
 oeplEl.innerText = oepl;
 paeplEl.innerText = paepl;
 totalEl.innerText = total;
+
 saveFormState();
 return { tpu, oepl, paepl, total };
 }
-function closeScanner(){
 
-if(qrScanner){
-
-qrScanner.stop();
-
-}
-
-document.getElementById("reader").style.display="none";
-
-}
 function saveFormState(){
 localStorage.setItem("lastCombo", combo.value);
 localStorage.setItem("lastAdults", adults.value);
 localStorage.setItem("lastChildren", children.value);
 }
 
-function getVendorBreakup(comboName,pax){
-function line(items){ return items.map(i => `${i.name}: ${i.price * pax}`).join(" | "); }
+function closeScanner(){
+if(qrScanner){
+qrScanner.stop().then(() => {
+qrScanner = null;
+scannerOverlay.classList.remove("show");
+});
+}else{
+scannerOverlay.classList.remove("show");
+}
+}
+
+function getVendorBreakup(comboName, pax){
+function line(items){
+return items.map(i => `${i.name}: ${i.price * pax}`).join(" | ");
+}
+
 if(comboName.includes("Snow Adventure")) return `OEPL → ${line([{name:"Snow",price:255}])}`;
-else if(comboName.includes("Adventure Combo")) return `PAEPL → ${line([{name:"Gamezone",price:227}])}`;
-else if(comboName.includes("TU Explorer")) return `OEPL → ${line([{name:"Wax",price:70}])}\nPAEPL → ${line([{name:"Eyelusion",price:70},{name:"WOG",price:80}])}`;
-else if(comboName.includes("ECO FUN")) return `OEPL → ${line([{name:"Wax",price:28}])}\nPAEPL → ${line([{name:"Mayalok",price:200}])}`;
-else if(comboName.includes("Aastha")) return `PAEPL → ${line([{name:"Gamezone",price:99}])}`;
-else if(comboName.includes("Shiv Ganesha")) return `PAEPL → ${line([{name:"Eyelusion",price:50},{name:"Gamezone",price:50},{name:"WOG",price:75}])}`;
-else if(comboName.includes("Namah")) return `PAEPL → ${line([{name:"Gamezone",price:50}])}`;
-else if(comboName.includes("Ultimate Play")) return `PAEPL → ${line([{name:"Gamezone",price:529}])}`;
-else if(comboName.includes("Viewing Fun")) return `OEPL → ${line([{name:"Snow",price:225},{name:"Food",price:100}])}\nPAEPL → ${line([{name:"Gamezone",price:50}])}`;
-else if(comboName.includes("Symbolic")) return `OEPL → ${line([{name:"Snow",price:200},{name:"Wax",price:49}])}\nPAEPL → ${line([{name:"Gamezone",price:100},{name:"WOG",price:70}])}`;
-else if(comboName.includes("Delight")) return `OEPL → ${line([{name:"Snow",price:200},{name:"Food",price:45},{name:"Souvenir",price:60},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:249},{name:"WOG",price:75}])}`;
-else if(comboName.includes("Mini Blast")) return `OEPL → ${line([{name:"Snow",price:200},{name:"Food",price:45},{name:"Souvenir",price:60},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:249},{name:"WOG",price:75}])}`;
-else if(comboName.includes("All in Fun")) return `OEPL → ${line([{name:"Snow",price:200},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:279},{name:"WOG",price:70}])}`;
-else if(comboName.includes("Divine Rush")) return `PAEPL → ${line([{name:"Gamezone",price:100},{name:"WOG",price:50}])}`;
-else if(comboName.includes("Ultimate Mega")) return `OEPL → ${line([{name:"Snow",price:150},{name:"Food",price:99},{name:"Souvenir",price:100},{name:"Wax",price:100}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:150},{name:"Gamezone",price:2100},{name:"WOG",price:50}])}`;
+if(comboName.includes("Adventure Combo")) return `PAEPL → ${line([{name:"Gamezone",price:227}])}`;
+if(comboName.includes("TU Explorer")) return `OEPL → ${line([{name:"Wax",price:70}])}\nPAEPL → ${line([{name:"Eyelusion",price:70},{name:"WOG",price:80}])}`;
+if(comboName.includes("ECO FUN")) return `OEPL → ${line([{name:"Wax",price:28}])}\nPAEPL → ${line([{name:"Mayalok",price:200}])}`;
+if(comboName.includes("Aastha")) return `PAEPL → ${line([{name:"Gamezone",price:99}])}`;
+if(comboName.includes("Shiv Ganesha")) return `PAEPL → ${line([{name:"Eyelusion",price:50},{name:"Gamezone",price:50},{name:"WOG",price:75}])}`;
+if(comboName.includes("Namah")) return `PAEPL → ${line([{name:"Gamezone",price:50}])}`;
+if(comboName.includes("Ultimate Play")) return `PAEPL → ${line([{name:"Gamezone",price:529}])}`;
+if(comboName.includes("Viewing Fun")) return `OEPL → ${line([{name:"Snow",price:225},{name:"Food",price:100}])}\nPAEPL → ${line([{name:"Gamezone",price:50}])}`;
+if(comboName.includes("Symbolic")) return `OEPL → ${line([{name:"Snow",price:200},{name:"Wax",price:49}])}\nPAEPL → ${line([{name:"Gamezone",price:100},{name:"WOG",price:70}])}`;
+if(comboName.includes("Delight")) return `OEPL → ${line([{name:"Snow",price:200},{name:"Food",price:45},{name:"Souvenir",price:60},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:249},{name:"WOG",price:75}])}`;
+if(comboName.includes("Mini Blast")) return `OEPL → ${line([{name:"Snow",price:200},{name:"Food",price:45},{name:"Souvenir",price:60},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:249},{name:"WOG",price:75}])}`;
+if(comboName.includes("All in Fun")) return `OEPL → ${line([{name:"Snow",price:200},{name:"Wax",price:50}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:200},{name:"Gamezone",price:279},{name:"WOG",price:70}])}`;
+if(comboName.includes("Divine Rush")) return `PAEPL → ${line([{name:"Gamezone",price:100},{name:"WOG",price:50}])}`;
+if(comboName.includes("Ultimate Mega")) return `OEPL → ${line([{name:"Snow",price:150},{name:"Food",price:99},{name:"Souvenir",price:100},{name:"Wax",price:100}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:150},{name:"Gamezone",price:2100},{name:"WOG",price:50}])}`;
 return "-";
 }
 
 function showLoginModal(){
 loginModal.classList.add("show");
 loginUsername.value = localStorage.getItem("username") || "";
-setTimeout(()=>loginUsername.focus(),100);
+setTimeout(() => loginUsername.focus(), 100);
 }
 
 function confirmUsername(){
@@ -975,131 +1015,136 @@ return;
 }
 localStorage.setItem("username", savedUsername);
 loginModal.classList.remove("show");
-usernameInput.value = savedUsername;
+document.getElementById("usernameInput").value = savedUsername;
 usernameEl.innerText = savedUsername;
 }
 
 async function restoreTodayData(){
-let username = usernameInput.value.trim();
+let username = document.getElementById("usernameInput").value.trim();
 if(!username){
 showLoginModal();
 return;
 }
+
 let today = new Date().toLocaleDateString("en-GB");
 let url = APP_SCRIPT_URL + "?date=" + encodeURIComponent(today) + "&displayName=" + encodeURIComponent(username);
 const res = await fetch(url);
 const rows = await res.json();
-if(rows.length==0){
+
+if(rows.length === 0){
 alert("No data found.");
 return;
 }
+
 data = rows;
-if(rows[0].displayName) usernameInput.value = rows[0].displayName;
-localStorage.setItem("sobData",JSON.stringify(data));
+if(rows[0].displayName) document.getElementById("usernameInput").value = rows[0].displayName;
+localStorage.setItem("sobData", JSON.stringify(data));
 render();
 }
-let qrScanner;
 
 function startScanner(){
+scannerOverlay.classList.add("show");
 
-document.getElementById("reader").style.display="block";
+if(qrScanner){
+qrScanner.stop().finally(() => {
+qrScanner = null;
+initScanner();
+});
+}else{
+initScanner();
+}
+}
 
-qrScanner=new Html5Qrcode("reader");
-
+function initScanner(){
+qrScanner = new Html5Qrcode("reader");
 qrScanner.start(
-
+{ facingMode: "environment" },
 {
-
-facingMode:"environment"
-
+fps: 15,
+qrbox: { width: 260, height: 260 },
+aspectRatio: 1
 },
-
-{
-
-fps:15,
-
-qrbox:{
-
-width:260,
-
-height:260
-
-},
-
-aspectRatio:1
-
-},
-
-onScanSuccess
-
-);
-
+onScanSuccess,
+onScanFailure
+).catch(err => {
+console.error(err);
+alert("Camera could not start.");
+closeScanner();
+});
 }
 
 function onScanSuccess(decodedText){
-
-qrScanner.stop();
-
-document.getElementById("reader").style.display="none";
-
-let m=decodedText.match(/SOB0*([0-9]{6})/i);
+let m = decodedText.match(/[Ss][Oo][Bb]0*([0-9]{6})/);
+closeScanner();
 
 if(m){
-
-sobInput.value=m[1];
-
+sobInput.value = m[1];
+setTimeout(() => saveEntry(), 200);
+}
 }
 
-else{
-
-alert("Invalid SOB QR");
-
+function onScanFailure(){
 }
 
-}
 function saveEntry(){
 let raw = sobInput.value.trim();
-let username = usernameInput.value.trim();
+let username = document.getElementById("usernameInput").value.trim();
 localStorage.setItem("username", username);
 let usernameKey = normalizeUsername(username);
-if(!/^[1-9][0-9]{5}$/.test(raw)){
+
+let match = raw.match(/SOB0*([0-9]{6})/i);
+if(match){
+raw = match[1];
+sobInput.value = raw;
+}
+
+if(!/^[0-9]{6}$/.test(raw)){
 alert("Enter valid 6-digit SOB ID");
 return;
 }
+
 let sob = "SOB000" + raw;
 if(data.some(d => d.sob === sob)){
 alert("This SOB ID already exists");
 return;
 }
+
 let r = calc();
 if(!r) return;
+
 let pax = (+adults.value || 0) + (+children.value || 0);
 let comboName = combo.options[combo.selectedIndex].text;
-let breakup = getVendorBreakup(comboName,pax);
-
-const entryId =
-crypto.randomUUID();
+let breakup = getVendorBreakup(comboName, pax);
+const entryId = crypto.randomUUID();
 
 data.push({
 entryId,
 deviceId,
-displayName:username,
+displayName: username,
 sob,
 ...r,
 comboName,
-adults:(+adults.value || 0),
-children:(+children.value || 0),
+adults: (+adults.value || 0),
+children: (+children.value || 0),
 breakup,
-time:new Date().toLocaleTimeString([], { hour:"numeric", minute:"2-digit", hour12:true })
+time: new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true })
 });
+
+localStorage.setItem("sobData", JSON.stringify(data));
+localStorage.setItem("sobDataBackup", JSON.stringify(data));
+localStorage.setItem("username", username);
+localStorage.setItem("usernameKey", usernameKey);
+render();
+sobInput.value = "";
+
 fetch(APP_SCRIPT_URL,{
 method:"POST",
-headers:{ "Content-Type":"text/plain" },
+headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
 date:new Date().toLocaleDateString("en-GB"),
 deviceId:deviceId,
 displayName:username,
-entryId: entryId,
+entryId:entryId,
 sob:sob,
 comboName:comboName,
 adults:+adults.value||0,
@@ -1112,33 +1157,9 @@ breakup:breakup,
 time:new Date().toLocaleTimeString([], { hour:"numeric", minute:"2-digit", hour12:true })
 })
 })
-.then(r => r.json())
-.then(res => {
-if(res.status === "duplicate"){
-alert(res.sob + " is already saved by " + res.displayName);
-data.pop();
-render();
-return;
-}
-if(res.status !== "success"){
-alert(res.message || "Unable to save.");
-data.pop();
-render();
-return;
-}
-})
-.catch(err => {
-data.pop();
-render();
-alert("Unable to connect to server.");
-console.error(err);
-});
-localStorage.setItem("sobData",JSON.stringify(data));
-localStorage.setItem("sobDataBackup",JSON.stringify(data));
-localStorage.setItem("username",username);
-localStorage.setItem("usernameKey",usernameKey);
-render();
-sobInput.value = "";
+.then(r => r.text())
+.then(txt => console.log("Sheet response:", txt))
+.catch(err => console.log("Sheet save error:", err));
 }
 
 function resetForm(){
@@ -1158,40 +1179,29 @@ warning.innerText = "";
 
 function resetAllData(){
 if(!confirm("Delete all saved SOB IDs?")) return;
-localStorage.setItem("sobDataBackup",JSON.stringify(data));
+localStorage.setItem("sobDataBackup", JSON.stringify(data));
 data = [];
 localStorage.removeItem("sobData");
 render();
 }
 
 async function deleteEntry(index){
-
 if(!confirm("Delete this SOB ID?")) return;
-
-const row=data[index];
+const row = data[index];
 
 await fetch(APP_SCRIPT_URL,{
 method:"POST",
-headers:{
-"Content-Type":"text/plain"
-},
+headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
-
 action:"DELETE",
-
 date:new Date().toLocaleDateString("en-GB"),
-
 entryId:row.entryId
-
 })
 });
 
 data.splice(index,1);
-
-localStorage.setItem("sobData",JSON.stringify(data));
-
+localStorage.setItem("sobData", JSON.stringify(data));
 render();
-
 }
 
 function openEditModal(index){
@@ -1201,6 +1211,7 @@ editSob.value = d.sob.replace("SOB000","");
 editAdults.value = d.adults;
 editChildren.value = d.children;
 editCombo.innerHTML = "";
+
 Array.from(combo.options).slice(1).forEach(opt => {
 let o = document.createElement("option");
 o.value = opt.value;
@@ -1208,7 +1219,9 @@ o.textContent = opt.text;
 if(opt.text === d.comboName) o.selected = true;
 editCombo.appendChild(o);
 });
+
 setEditTimeOptions();
+
 let tm = (d.time || "").match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);
 if(tm){
 editHour.value = String(parseInt(tm[1]));
@@ -1223,6 +1236,7 @@ editHour.value = String(h);
 editMinute.value = pad2(now.getMinutes());
 editAmPm.value = ampm;
 }
+
 editModal.style.display = "block";
 }
 
@@ -1233,33 +1247,41 @@ editingIndex = -1;
 
 function saveEdit(){
 if(editingIndex < 0) return;
+
 let raw = editSob.value.trim();
 if(!/^[0-9]{6}$/.test(raw)){
 alert("Enter valid 6-digit SOB ID");
 return;
 }
+
 let sob = "SOB000" + raw;
 if(data.some((d,i) => i !== editingIndex && d.sob === sob)){
 alert("This SOB ID already exists");
 return;
 }
+
 let comboValue = editCombo.value;
 let comboText = editCombo.options[editCombo.selectedIndex]?.text || "";
 let tempCombo = combo.value;
 let tempAdults = adults.value;
 let tempChildren = children.value;
+
 combo.value = comboValue;
 adults.value = editAdults.value;
 children.value = editChildren.value;
 let r = calc();
+
 combo.value = tempCombo;
 adults.value = tempAdults;
 children.value = tempChildren;
 calc();
+
 if(!r) return;
+
 let pax = (+editAdults.value || 0) + (+editChildren.value || 0);
 let breakup = getVendorBreakup(comboText, pax);
 const originalSob = data[editingIndex].sob;
+
 data[editingIndex] = {
 ...data[editingIndex],
 sob,
@@ -1273,75 +1295,55 @@ total:r.total,
 breakup,
 time:`${editHour.value}:${editMinute.value} ${editAmPm.value}`
 };
-localStorage.setItem("sobData",JSON.stringify(data));
+
+localStorage.setItem("sobData", JSON.stringify(data));
+
 fetch(APP_SCRIPT_URL,{
-    method:"POST",
-    headers:{
-        "Content-Type":"text/plain"
-    },
-    body:JSON.stringify({
-
-        action:"UPDATE",
-
-        date:new Date().toLocaleDateString("en-GB"),
-
-        originalSob:originalSob,
-
-        deviceId:deviceId,
-
-        displayName:usernameInput.value.trim(),
-
-        sob:sob,
-
-        comboName:comboText,
-
-        adults:+editAdults.value||0,
-
-        children:+editChildren.value||0,
-
-        tpu:r.tpu,
-
-        oepl:r.oepl,
-
-        paepl:r.paepl,
-
-        total:r.total,
-
-        breakup:breakup,
-
-        time:`${editHour.value}:${editMinute.value} ${editAmPm.value}`
-
-    })
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify({
+action:"UPDATE",
+date:new Date().toLocaleDateString("en-GB"),
+originalSob:originalSob,
+deviceId:deviceId,
+displayName:document.getElementById("usernameInput").value.trim(),
+sob:sob,
+comboName:comboText,
+adults:+editAdults.value||0,
+children:+editChildren.value||0,
+tpu:r.tpu,
+oepl:r.oepl,
+paepl:r.paepl,
+total:r.total,
+breakup:breakup,
+time:`${editHour.value}:${editMinute.value} ${editAmPm.value}`
 })
-.then(r=>r.json())
-.then(res=>{
-
-    if(res.status!=="updated"){
-
-        alert("Unable to update Google Sheet.");
-
-        console.log(res);
-
-    }
-
 })
-.catch(err=>{
+.then(r => r.text())
+.then(txt => console.log("Update response:", txt))
+.catch(err => console.log("Network Error while updating:", err));
 
-    console.log(err);
-
-    alert("Network Error while updating.");
-
-});
 render();
 closeEditModal();
 }
 
-function editEntry(index){ openEditModal(index); }
-function formatTime(t){ return t; }
+function editEntry(index){
+openEditModal(index);
+}
+
+function formatTime(t){
+return t;
+}
 
 function render(){
 dataBody.innerHTML = "";
-let totalAll = 0, tpuSum = 0, oeplSum = 0, paeplSum = 0, oeplActivities = {}, paeplActivities = {};
+let totalAll = 0;
+let tpuSum = 0;
+let oeplSum = 0;
+let paeplSum = 0;
+let oeplActivities = {};
+let paeplActivities = {};
+
 data.forEach((d,i)=>{
 dataBody.innerHTML += `
 <tr>
@@ -1357,18 +1359,22 @@ dataBody.innerHTML += `
 <td style="font-size:10px;">${formatTime(d.time)}</td>
 </tr>
 `;
+
 tpuSum += d.tpu;
 oeplSum += d.oepl;
 paeplSum += d.paepl;
 totalAll += d.total;
+
 let tempDiv = document.createElement("div");
 tempDiv.innerHTML = d.breakup;
 let text = tempDiv.innerText.split("\n");
+
 text.forEach(line => {
 line = line.trim();
+
 if(line.startsWith("OEPL")){
 let activities = line.replace("OEPL →","").split("|");
-activities.forEach(a=>{
+activities.forEach(a => {
 let parts = a.split(":");
 if(parts.length < 2) return;
 let name = parts[0].trim();
@@ -1376,9 +1382,10 @@ let value = parseInt(parts[1]) || 0;
 oeplActivities[name] = (oeplActivities[name] || 0) + value;
 });
 }
+
 if(line.startsWith("PAEPL")){
 let activities = line.replace("PAEPL →","").split("|");
-activities.forEach(a=>{
+activities.forEach(a => {
 let parts = a.split(":");
 if(parts.length < 2) return;
 let name = parts[0].trim();
@@ -1388,16 +1395,20 @@ paeplActivities[name] = (paeplActivities[name] || 0) + value;
 }
 });
 });
-function formatActivities(obj){ return Object.entries(obj).map(([k,v]) => `${k}: ${v}`).join(" | "); }
+
+function formatActivities(obj){
+return Object.entries(obj).map(([k,v]) => `${k}: ${v}`).join(" | ");
+}
+
 grandT.innerHTML = "<b>" + totalAll + "</b>";
 tpuT.innerHTML = "<b>" + tpuSum + "</b>";
 oeplT.innerHTML = "<b>" + oeplSum + "</b>";
 paeplT.innerHTML = "<b>" + paeplSum + "</b>";
-activityTotals.innerHTML = "<u>OEPL</u> → "+formatActivities(oeplActivities)+"<br>"+"<u>PAEPL</u> → "+formatActivities(paeplActivities);
+activityTotals.innerHTML = "<u>OEPL</u> → " + formatActivities(oeplActivities) + "<br>" + "<u>PAEPL</u> → " + formatActivities(paeplActivities);
 }
 
 function printA4(){
-let username = usernameInput.value.trim();
+let username = document.getElementById("usernameInput").value.trim();
 if(username){
 usernameEl.innerText = username;
 localStorage.setItem("username", username);
@@ -1412,31 +1423,37 @@ const originalUser = usernameEl.innerText;
 const today = new Date().toLocaleDateString("en-GB");
 const res = await fetch(APP_SCRIPT_URL + "?date=" + encodeURIComponent(today) + "&all=true");
 const rows = await res.json();
+
 if(!rows.length){
 alert("No entries found.");
 return;
 }
+
 let grouped = {};
-rows.forEach(r=>{
+rows.forEach(r => {
 const key = (r.displayName || "Unknown").trim().toLowerCase();
-if(!grouped[key]) grouped[key]={ name:(r.displayName || "Unknown").trim(), rows:[] };
+if(!grouped[key]) grouped[key] = { name:(r.displayName || "Unknown").trim(), rows:[] };
 grouped[key].rows.push(r);
 });
-let html="";
+
+let html = "";
 for(const group of Object.values(grouped)){
 data = group.rows;
 usernameEl.innerText = group.name;
 render();
 html += `<div class="a4Page">${document.getElementById("printArea").innerHTML}<hr style="border:1px dashed #999;margin:12px 0;"></div>`;
 }
+
 data = originalData;
 usernameEl.innerText = originalUser;
 render();
+
 const win = window.open("", "_blank");
 if(!win){
 alert("Popup blocked.\nPlease allow popups for this website.");
 return;
 }
+
 win.document.open();
 win.document.write(`
 <!DOCTYPE html>
@@ -1456,6 +1473,7 @@ body{margin:0;padding:0;font-family:'Arimo',sans-serif;}
 </html>
 `);
 win.document.close();
+
 win.onload = function(){
 setTimeout(function(){
 win.focus();
@@ -1469,7 +1487,7 @@ alert("Unable to print all.");
 }
 
 function setDate(){
-dateEl.innerText = new Date().toLocaleDateString('en-GB');
+dateEl.innerText = new Date().toLocaleDateString("en-GB");
 }
 
 function restoreFormState(){
@@ -1492,7 +1510,7 @@ let savedUsername = localStorage.getItem("username");
 if(!savedUsername){
 showLoginModal();
 }else{
-usernameInput.value = savedUsername;
+document.getElementById("usernameInput").value = savedUsername;
 usernameEl.innerText = savedUsername;
 }
 
