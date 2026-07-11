@@ -1026,6 +1026,18 @@ onclick="startScanner()">
 </div>
 
 <script>
+
+    function todayString(){
+
+return new Intl.DateTimeFormat(
+'en-GB',
+{
+timeZone:'Asia/Kolkata'
+}
+).format(new Date());
+
+}
+
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_Vhlq9wHwMBBrY0gmzfLSObRzxR_ATE2jonce0aoO38O5xcjbzkG5I1sFhp61NvTQ/exec";
 let data = JSON.parse(localStorage.getItem("sobData")) || [];
 let editingIndex = -1;
@@ -1060,7 +1072,7 @@ const loginModal = document.getElementById("loginModal");
 const loginUsername = document.getElementById("loginUsername");
 const scannerOverlay = document.getElementById("scannerOverlay");
 
-const todayKey = new Date().toLocaleDateString("en-GB");
+const todayKey = todayString();
 const savedDate = localStorage.getItem("sobDate");
 
 if(savedDate !== todayKey){
@@ -1188,7 +1200,7 @@ showLoginModal();
 return;
 }
 
-let today = new Date().toLocaleDateString("en-GB");
+let today = todayString();
 let url = APP_SCRIPT_URL +
 "?date=" + encodeURIComponent(today) +
 "&all=true";
@@ -1308,7 +1320,7 @@ sobInput.value = "";
 fetch(APP_SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
-date:new Date().toLocaleDateString("en-GB"),
+date:todayString(),
 deviceId:deviceId,
 displayName:username,
 entryId:entryId,
@@ -1381,7 +1393,7 @@ async function resetAllData(){
 
 if(!confirm("Reset all today's SOB IDs?")) return;
 
-let today=new Date().toLocaleDateString("en-GB");
+let today=todayString();
 
 for(const row of data){
 
@@ -1447,7 +1459,7 @@ const res = await fetch(APP_SCRIPT_URL,{
 
         action:"DELETE",
 
-        date:new Date().toLocaleDateString("en-GB"),
+        date:todayString(),
 
         entryId:row.entryId,
 
@@ -1569,7 +1581,7 @@ fetch(APP_SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
 action:"UPDATE",
-date:new Date().toLocaleDateString("en-GB"),
+date:todayString(),
 entryId:data[editingIndex].entryId,
 deviceId:deviceId,
 displayName:document.getElementById("usernameInput").value.trim(),
@@ -1687,7 +1699,7 @@ try{
 const username=document.getElementById("usernameInput").value.trim();
 const originalData=structuredClone(data);
 const originalUser = usernameEl.innerText;
-const today = new Date().toLocaleDateString("en-GB");
+const today = todayString();
 
 const res = await fetch(
 APP_SCRIPT_URL +
@@ -1799,7 +1811,7 @@ if(localStorage.getItem("theme")==="dark"){
     document.querySelector(".hiText").textContent="🌙 Hi,";
 }
 function setDate(){
-dateEl.innerText = new Date().toLocaleDateString("en-GB");
+dateEl.innerText = todayString();
 }
 
 function restoreFormState(){
