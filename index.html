@@ -1014,7 +1014,7 @@ onclick="startScanner()">
 </div>
 </div>
 
-<div class="footer-left">26G11 | V4.5 ☁️</div>
+<div class="footer-left">26G11 | V4.5</div>
 
 <div id="scannerOverlay" class="scannerOverlay">
 <div class="scannerBox">
@@ -1191,14 +1191,18 @@ return;
 let today = new Date().toLocaleDateString("en-GB");
 let url = APP_SCRIPT_URL +
 "?date=" + encodeURIComponent(today) +
-"&displayName=" + encodeURIComponent(username) +
-"&deviceId=" + encodeURIComponent(deviceId);
+"&all=true";
 const res = await fetch(url);
 const rows = await res.json();
 
-if(rows.length === 0){
-alert("No data found.");
-return;
+if(rows.status === "error"){
+    alert(rows.message);
+    return;
+}
+
+if(!rows.length){
+    alert("No data found.");
+    return;
 }
 
 data = rows;
@@ -1303,7 +1307,6 @@ sobInput.value = "";
 
 fetch(APP_SCRIPT_URL,{
 method:"POST",
-headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
 date:new Date().toLocaleDateString("en-GB"),
 deviceId:deviceId,
@@ -1344,7 +1347,18 @@ time:new Date().toLocaleTimeString([], { hour:"numeric", minute:"2-digit", hour1
 
 })
 .catch(err=>{
-    alert(err);
+
+    data.pop();
+
+    localStorage.setItem(
+        "sobData",
+        JSON.stringify(data)
+    );
+
+    render();
+
+    alert("Save failed.\nCheck internet connection.");
+
 });
 }
 
@@ -1373,9 +1387,7 @@ for(const row of data){
 
 await fetch(APP_SCRIPT_URL,{
     method:"POST",
-    headers:{
-        "Content-Type":"application/json"
-    },
+    
     body:JSON.stringify({
 
 action:"RESET",
@@ -1430,9 +1442,7 @@ const row = data[index];
 
 const res = await fetch(APP_SCRIPT_URL,{
     method:"POST",
-    headers:{
-        "Content-Type":"application/json"
-    },
+    
     body:JSON.stringify({
 
         action:"DELETE",
@@ -1557,7 +1567,6 @@ localStorage.setItem("sobData", JSON.stringify(data));
 
 fetch(APP_SCRIPT_URL,{
 method:"POST",
-headers:{ "Content-Type":"application/json" },
 body:JSON.stringify({
 action:"UPDATE",
 date:new Date().toLocaleDateString("en-GB"),
@@ -1683,8 +1692,7 @@ const today = new Date().toLocaleDateString("en-GB");
 const res = await fetch(
 APP_SCRIPT_URL +
 "?date=" + encodeURIComponent(today) +
-"&displayName=" + encodeURIComponent(username) +
-"&deviceId=" + encodeURIComponent(deviceId)
+"&all=true"
 );
 const rows=await res.json();
 
