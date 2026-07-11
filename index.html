@@ -57,7 +57,56 @@ filter:brightness(1.08);
 background:linear-gradient(135deg,#00c853,#009624);
 box-shadow:3px 3px 0 #00701a,5px 6px 10px rgba(0,0,0,.18);
 }
+.sobField{
+width:90%;
+max-width:340px;
+margin:auto;
+display:flex;
+align-items:center;
+background:#fff;
+border-radius:14px;
+box-shadow:
+inset 2px 2px 5px rgba(0,0,0,.08),
+4px 4px 10px rgba(0,0,0,.12);
+overflow:hidden;
+}
 
+.sobField input{
+flex:1;
+border:none;
+margin:0;
+padding:12px 14px;
+font-size:16px;
+background:transparent;
+box-shadow:none;
+outline:none;
+}
+
+#scanBtn{
+width:46px;
+height:46px;
+border:none;
+background:transparent;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+padding:0;
+margin:0;
+box-shadow:none;
+border-left:1px solid #ddd;
+border-radius:0;
+}
+
+#scanBtn:hover{
+background:#f5f5f5;
+}
+
+#scanBtn svg{
+width:22px;
+height:22px;
+fill:#222;
+}
 .report-btn{
 background:linear-gradient(135deg,#8e24aa,#5e35b1);
 box-shadow:3px 3px 0 #4527a0,5px 6px 10px rgba(0,0,0,.18);
@@ -344,15 +393,15 @@ padding-top:10px;
 }
 
 .saveBtn{
-background:linear-gradient(135deg,#1976d2,#0d47a1);
+background:linear-gradient(135deg,#00c853,#009624);
 color:white;
-box-shadow:4px 4px 0 #0b3a82,6px 8px 14px rgba(0,0,0,.25);
+box-shadow:4px 4px 0 #00701a,6px 8px 14px rgba(0,0,0,.25);
 }
 
 .cancelBtn{
-background:linear-gradient(135deg,#ff5252,#d50000);
+background:linear-gradient(135deg,#ff5252,#c62828);
 color:white;
-box-shadow:4px 4px 0 #9b0000,6px 8px 14px rgba(0,0,0,.25);
+box-shadow:4px 4px 0 #8e0000,6px 8px 14px rgba(0,0,0,.25);
 }
 
 .saveBtn,
@@ -548,7 +597,9 @@ margin:0;
 
 #loadBtn{
 display:inline-block;
-background:#1976d2;
+background:linear-gradient(135deg,#1976d2,#0d47a1);
+box-shadow:4px 4px 0 #0b3a82,6px 8px 14px rgba(0,0,0,.18);
+color:white;
 color:#fff;
 padding:5px 10px;
 font-size:12px;
@@ -631,12 +682,37 @@ justify-content:center;
 
 <br>
 
-<input type="tel" id="sobInput" maxlength="6" placeholder="Enter 6-digit SOB ID">
+<div class="sobField">
+
+<input
+id="sobInput"
+maxlength="6"
+placeholder="Enter 6-digit SOB ID"
+autocomplete="off">
+
+<button
+id="scanBtn"
+type="button"
+onclick="startScanner()">
+
+<svg viewBox="0 0 24 24">
+
+<path d="M9 4L7.5 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.5L15 4H9zm3 4a5 5 0 1 1 0 10a5 5 0 0 1 0-10zm0 2.2a2.8 2.8 0 1 0 0 5.6a2.8 2.8 0 0 0 0-5.6z"/>
+
+</svg>
+
+</button>
+
+</div>
 
 <br>
 
-<button onclick="saveEntry()" style="background:#1976d2;color:white;">Save SOB</button>
-<button onclick="resetForm()" style="background:#f57c00;color:white;">Reset Calculator</button>
+<button onclick="saveEntry()" style="background:linear-gradient(135deg,#1976d2,#0d47a1);
+box-shadow:4px 4px 0 #0b3a82,6px 8px 14px rgba(0,0,0,.18);
+color:white;color:white;">Save SOB</button>
+<button onclick="resetForm()" style="background:linear-gradient(135deg,#ff9800,#ef6c00);
+box-shadow:4px 4px 0 #c43e00,6px 8px 14px rgba(0,0,0,.18);
+color:white;color:white;">Reset Calculator</button>
 
 <br>
 
@@ -750,7 +826,22 @@ justify-content:center;
 </div>
 
 <div class="footer-left">26G11 | V4.5</div>
+<div
+id="reader"
+style="
+display:none;
 
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.88);
+
+z-index:99999;
+
+padding:20px;
+">
+</div>
 <script>
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_Vhlq9wHwMBBrY0gmzfLSObRzxR_ATE2jonce0aoO38O5xcjbzkG5I1sFhp61NvTQ/exec";
 let data = JSON.parse(localStorage.getItem("sobData")) || [];
@@ -833,7 +924,17 @@ totalEl.innerText = total;
 saveFormState();
 return { tpu, oepl, paepl, total };
 }
+function closeScanner(){
 
+if(qrScanner){
+
+qrScanner.stop();
+
+}
+
+document.getElementById("reader").style.display="none";
+
+}
 function saveFormState(){
 localStorage.setItem("lastCombo", combo.value);
 localStorage.setItem("lastAdults", adults.value);
@@ -897,7 +998,65 @@ if(rows[0].displayName) usernameInput.value = rows[0].displayName;
 localStorage.setItem("sobData",JSON.stringify(data));
 render();
 }
+let qrScanner;
 
+function startScanner(){
+
+document.getElementById("reader").style.display="block";
+
+qrScanner=new Html5Qrcode("reader");
+
+qrScanner.start(
+
+{
+
+facingMode:"environment"
+
+},
+
+{
+
+fps:15,
+
+qrbox:{
+
+width:260,
+
+height:260
+
+},
+
+aspectRatio:1
+
+},
+
+onScanSuccess
+
+);
+
+}
+
+function onScanSuccess(decodedText){
+
+qrScanner.stop();
+
+document.getElementById("reader").style.display="none";
+
+let m=decodedText.match(/SOB0*([0-9]{6})/i);
+
+if(m){
+
+sobInput.value=m[1];
+
+}
+
+else{
+
+alert("Invalid SOB QR");
+
+}
+
+}
 function saveEntry(){
 let raw = sobInput.value.trim();
 let username = usernameInput.value.trim();
@@ -917,7 +1076,12 @@ if(!r) return;
 let pax = (+adults.value || 0) + (+children.value || 0);
 let comboName = combo.options[combo.selectedIndex].text;
 let breakup = getVendorBreakup(comboName,pax);
+
+const entryId =
+crypto.randomUUID();
+
 data.push({
+entryId,
 deviceId,
 displayName:username,
 sob,
@@ -935,6 +1099,7 @@ body:JSON.stringify({
 date:new Date().toLocaleDateString("en-GB"),
 deviceId:deviceId,
 displayName:username,
+entryId: entryId,
 sob:sob,
 comboName:comboName,
 adults:+adults.value||0,
@@ -999,12 +1164,34 @@ localStorage.removeItem("sobData");
 render();
 }
 
-function deleteEntry(index){
+async function deleteEntry(index){
+
 if(!confirm("Delete this SOB ID?")) return;
+
+const row=data[index];
+
+await fetch(APP_SCRIPT_URL,{
+method:"POST",
+headers:{
+"Content-Type":"text/plain"
+},
+body:JSON.stringify({
+
+action:"DELETE",
+
+date:new Date().toLocaleDateString("en-GB"),
+
+entryId:row.entryId
+
+})
+});
+
 data.splice(index,1);
+
 localStorage.setItem("sobData",JSON.stringify(data));
-localStorage.setItem("sobDataBackup",JSON.stringify(data));
+
 render();
+
 }
 
 function openEditModal(index){
@@ -1072,6 +1259,7 @@ calc();
 if(!r) return;
 let pax = (+editAdults.value || 0) + (+editChildren.value || 0);
 let breakup = getVendorBreakup(comboText, pax);
+const originalSob = data[editingIndex].sob;
 data[editingIndex] = {
 ...data[editingIndex],
 sob,
@@ -1086,6 +1274,64 @@ breakup,
 time:`${editHour.value}:${editMinute.value} ${editAmPm.value}`
 };
 localStorage.setItem("sobData",JSON.stringify(data));
+fetch(APP_SCRIPT_URL,{
+    method:"POST",
+    headers:{
+        "Content-Type":"text/plain"
+    },
+    body:JSON.stringify({
+
+        action:"UPDATE",
+
+        date:new Date().toLocaleDateString("en-GB"),
+
+        originalSob:originalSob,
+
+        deviceId:deviceId,
+
+        displayName:usernameInput.value.trim(),
+
+        sob:sob,
+
+        comboName:comboText,
+
+        adults:+editAdults.value||0,
+
+        children:+editChildren.value||0,
+
+        tpu:r.tpu,
+
+        oepl:r.oepl,
+
+        paepl:r.paepl,
+
+        total:r.total,
+
+        breakup:breakup,
+
+        time:`${editHour.value}:${editMinute.value} ${editAmPm.value}`
+
+    })
+})
+.then(r=>r.json())
+.then(res=>{
+
+    if(res.status!=="updated"){
+
+        alert("Unable to update Google Sheet.");
+
+        console.log(res);
+
+    }
+
+})
+.catch(err=>{
+
+    console.log(err);
+
+    alert("Network Error while updating.");
+
+});
 render();
 closeEditModal();
 }
@@ -1253,6 +1499,6 @@ usernameEl.innerText = savedUsername;
 setDate();
 render();
 </script>
-
+<script src="https://unpkg.com/html5-qrcode"></script>
 </body>
 </html>
