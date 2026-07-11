@@ -1027,17 +1027,32 @@ onclick="startScanner()">
 
 <script>
 
-    function todayString(){
+function todayString(){
 
 return new Intl.DateTimeFormat(
 'en-GB',
 {
-timeZone:'Asia/Kolkata'
+timeZone:'Asia/Kolkata',
+day:'2-digit',
+month:'2-digit',
+year:'numeric'
 }
 ).format(new Date());
 
 }
+function timeString(){
 
+return new Intl.DateTimeFormat(
+'en-US',
+{
+timeZone:'Asia/Kolkata',
+hour:'2-digit',
+minute:'2-digit',
+hour12:true
+}
+).format(new Date());
+
+}
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_Vhlq9wHwMBBrY0gmzfLSObRzxR_ATE2jonce0aoO38O5xcjbzkG5I1sFhp61NvTQ/exec";
 let data = JSON.parse(localStorage.getItem("sobData")) || [];
 let editingIndex = -1;
@@ -1201,9 +1216,10 @@ return;
 }
 
 let today = todayString();
-let url = APP_SCRIPT_URL +
+let url =
+APP_SCRIPT_URL +
 "?date=" + encodeURIComponent(today) +
-"&all=true";
+"&displayName=" + encodeURIComponent(username);
 const res = await fetch(url);
 const rows = await res.json();
 
@@ -1308,7 +1324,7 @@ comboName,
 adults: (+adults.value || 0),
 children: (+children.value || 0),
 breakup,
-time: new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: true })
+time: timeString()
 });
 
 localStorage.setItem("sobData", JSON.stringify(data));
@@ -1333,7 +1349,7 @@ oepl:r.oepl,
 paepl:r.paepl,
 total:r.total,
 breakup:breakup,
-time:new Date().toLocaleTimeString([], { hour:"numeric", minute:"2-digit", hour12:true })
+time:timeString()
 })
 })
 .then(r => r.json())
@@ -1597,7 +1613,10 @@ breakup:breakup,
 time:`${editHour.value}:${editMinute.value} ${editAmPm.value}`
 })
 })
-.then(r => r.text())
+.then(r => r.json())
+.then(res=>{
+console.log(res);
+})
 .then(txt => console.log("Update response:", txt))
 .catch(err => console.log("Network Error while updating:", err));
 
