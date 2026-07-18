@@ -127,20 +127,109 @@ box-shadow:none;
 border-left:1px solid #ddd;
 border-radius:0;
 }
-
 #scanBtn:hover{
 background:#f5f5f5;
 }
-
 #scanBtn svg{
 width:22px;
 height:22px;
 fill:#222;
 }
-
+body.dark #scanBtn svg{
+fill:#fff;
+}
 .report-btn{
 background:linear-gradient(135deg,#8e24aa,#5e35b1);
 box-shadow:3px 3px 0 #4527a0,5px 6px 10px rgba(0,0,0,.18);
+}
+.print-all-wrap{
+position:relative;
+display:inline-block;
+}
+.print-split{
+display:inline-flex;
+align-items:center;
+gap:0;
+overflow:hidden;
+border-radius:28px;
+box-shadow:4px 4px 0 #bdbdbd,6px 8px 14px rgba(0,0,0,.18);
+vertical-align:middle;
+}
+
+.print-split button{
+margin:0;
+border-radius:0;
+padding:12px 18px;
+font-size:14px;
+font-weight:bold;
+background:linear-gradient(to bottom,#ffffff,#e8e8e8);
+box-shadow:none;
+transition:all .15s ease;
+}
+
+.print-split button:hover{
+transform:translateY(-1px);
+filter:brightness(1.04);
+box-shadow:none;
+}
+
+.print-split button:active{
+transform:translateY(3px);
+box-shadow:none;
+}
+
+.print-print-btn{
+border-radius:28px 0 0 28px!important;
+border-right:1px solid #bdbdbd!important;
+}
+
+.print-all-btn{
+border-radius:0 28px 28px 0!important;
+padding-left:12px!important;
+padding-right:14px!important;
+min-width:75px;
+}
+.print-dropdown{
+display:none;
+position:absolute;
+right:0;
+top:100%;
+margin-top:6px;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:10px;
+box-shadow:0 8px 20px rgba(0,0,0,.16);
+padding:8px;
+width:200px;
+z-index:9999;
+text-align:left;
+}
+.print-dropdown.show{
+display:block;
+}
+.print-user-item{
+display:flex;
+align-items:center;
+justify-content:flex-start;
+gap:8px;
+font-size:13px;
+line-height:1.2;
+}
+.print-user-item input[type="checkbox"]{
+width:auto;
+margin:0;
+box-shadow:none;
+}
+.print-user-item span{
+display:inline-block;
+}
+.print-user-list{
+display:flex;
+flex-direction:column;
+gap:6px;
+max-height:220px;
+overflow:auto;
+text-align:left;
 }
 
 .deleteBtn{
@@ -150,13 +239,11 @@ line-height:1;
 margin:0;
 min-width:auto;
 }
-
 .a4{
 padding:8mm;
 box-sizing:border-box;
 overflow:hidden;
 }
-
 input,
 select{
 padding:12px;
@@ -170,13 +257,18 @@ border-radius:14px;
 background:#fff;
 box-shadow:inset 2px 2px 5px rgba(0,0,0,.08),4px 4px 10px rgba(0,0,0,.12);
 }
-
 select{
 appearance:none;
 -webkit-appearance:none;
 background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M1 3l5 5 5-5' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
 background-repeat:no-repeat;
 background-position:right 12px center;
+text-align:left;
+text-align-last:left;
+padding-left:12px;
+}
+select option{
+text-align:left;
 }
 
 .box{
@@ -187,13 +279,11 @@ padding:15px;
 border-radius:18px;
 box-shadow:8px 8px 20px rgba(0,0,0,.12);
 }
-
 .row{
 display:flex;
 justify-content:space-between;
 font-size:18px;
 }
-
 button{
 padding:12px 18px;
 margin:6px;
@@ -206,17 +296,14 @@ background:linear-gradient(to bottom,#ffffff,#e8e8e8);
 box-shadow:4px 4px 0 #bdbdbd,6px 8px 14px rgba(0,0,0,.18);
 transition:all .15s ease;
 }
-
 button:hover{
 transform:translate(-1px,-1px);
 box-shadow:5px 5px 0 #bdbdbd,8px 10px 16px rgba(0,0,0,.22);
 }
-
 button:active{
 transform:translateY(3px);
 box-shadow:0 1px 0 #bdbdbd,0 2px 4px rgba(0,0,0,0.15);
 }
-
 table{
 width:100%;
 margin:auto;
@@ -224,7 +311,6 @@ border-collapse:collapse;
 font-size:12px;
 border:1px solid black;
 }
-
 th,td{
 border:1px solid black;
 padding:2px 4px;
@@ -232,7 +318,6 @@ text-align:center;
 vertical-align:middle;
 line-height:14px;
 }
-
 .header{
 display:flex;
 justify-content:space-between;
@@ -242,7 +327,6 @@ align-items:center;
 gap:6px;
 flex-wrap:wrap;
 }
-
 .header-left,
 .header-center,
 .header-right{
@@ -252,20 +336,16 @@ gap:4px;
 min-width:0;
 flex:1 1 auto;
 }
-
 .header-center{
 justify-content:center;
 }
-
 .header-right{
 justify-content:flex-end;
 }
-
 .headerText{
 display:inline-block;
 white-space:nowrap;
 }
-
 .headerLine{
 display:inline-flex;
 align-items:flex-end;
@@ -280,18 +360,10 @@ vertical-align:bottom;
 line-height:16px;
 box-sizing:border-box;
 }
-
 #printArea .headerLine{
 min-width:50px;
 max-width:95px;
 }
-
-.activityRow{
-background:#f5f5f5;
-font-size:11px;
-font-weight:bold;
-}
-
 .activityCell{
 background:transparent;
 font-size:10px;
@@ -301,14 +373,12 @@ padding:6px 6px 6px 12px;
 vertical-align:top;
 white-space:normal;
 }
-
 .activityCell pre{
 margin:0;
 font:inherit;
 white-space:pre-wrap;
 line-height:12px;
 }
-
 .activityTotalsCell{
 background:#eaeaea;
 font-size:10px;
@@ -317,12 +387,21 @@ text-align:left!important;
 padding:6px 6px 6px 12px;
 vertical-align:top;
 }
+.editBtn{
+padding:2px 6px!important;
+font-size:11px!important;
+line-height:1!important;
+margin:0!important;
+min-width:auto!important;
+width:auto!important;
+height:auto!important;
+border-radius:28px!important;
+}
 
 .editBtn,
 .deleteBtn{
 box-shadow:3px 3px 0 #9e9e9e,5px 6px 12px rgba(0,0,0,.25);
 }
-
 .editBtn:hover,
 .deleteBtn:hover{
 transform:translate(-1px,-1px);
@@ -332,7 +411,6 @@ body.dark{
 background:#151515;
 color:#f2f2f2;
 }
-
 body.dark .box,
 body.dark .sobField,
 body.dark .editCard,
@@ -341,7 +419,6 @@ background:#242424;
 color:white;
 border:1px solid #3b3b3b;
 }
-
 body.dark input,
 body.dark select,
 body.dark textarea{
@@ -349,52 +426,42 @@ background:#2f2f2f;
 color:white;
 border:1px solid #555;
 }
-
 body.dark input::placeholder{
 color:#aaa;
 }
-
 body.dark table{
 background:#1b1b1b;
 color:#fff;
 border-color:#555;
 }
-
 body.dark th{
 background:#303030;
 color:#fff;
 border-color:#555;
 }
-
 body.dark td{
 background:#252525;
 color:#fff;
 border-color:#555;
 }
-
 body.dark .activityTotalsCell{
 background:#333;
 }
-
 body.dark .activityCell{
 background:#2a2a2a;
 }
-
 body.dark hr{
 border-color:#555;
 }
 body.dark button:not(.saveBtn):not(.cancelBtn){
 background:linear-gradient(#444,#2c2c2c);
 color:white;
-box-shadow:
-4px 4px 0 #111,
-6px 8px 14px rgba(0,0,0,.45);
+box-shadow:4px 4px 0 #111,6px 8px 14px rgba(0,0,0,.45);
 }
 body.dark .editActions,
 body.dark .loginActions{
 background:#242424;
 }
-
 body.dark .editTitle{
 color:#7dbbff;
 }
@@ -405,49 +472,28 @@ body.dark ::-webkit-scrollbar{
 height:12px;
 width:12px;
 }
-
 body.dark ::-webkit-scrollbar-track{
 background:#222;
 }
-
 body.dark ::-webkit-scrollbar-thumb{
 background:#666;
 border-radius:20px;
 }
-.editBtn{
-padding:2px 6px;
-font-size:11px;
-line-height:1;
-margin:0;
-min-width:auto;
-}
-
 .box:hover{
 transform:translateY(-2px);
 box-shadow:12px 12px 28px rgba(0,0,0,.15);
 transition:.2s;
 }
-
 .footer-left{
 position:fixed;
 bottom:5px;
 left:10px;
 font-size:12px;
 }
-
-.footer-right{
-position:fixed;
-bottom:5px;
-right:10px;
-text-align:right;
-font-size:12px;
-}
-
 #a4{
 padding:10mm;
 box-sizing:border-box;
 }
-
 .editCard,
 .loginCard{
 background:#ffffff;
@@ -463,14 +509,12 @@ border-radius:20px;
 box-shadow:10px 14px 40px rgba(0,0,0,.25),4px 6px 15px rgba(0,0,0,.15);
 animation:popIn .2s ease;
 }
-
 .editTitle{
 font-size:20px;
 font-weight:bold;
 margin-bottom:15px;
 color:#1565c0;
 }
-
 .editField,
 .loginField{
 width:100%;
@@ -481,21 +525,18 @@ border:2px solid #e0e0e0;
 font-size:15px;
 transition:.2s;
 }
-
 .timeField{
 width:100%;
 min-width:0;
 margin:8px 0;
 box-sizing:border-box;
 }
-
 .editField:focus,
 .loginField:focus{
 outline:none;
 border-color:#1565c0;
 box-shadow:0 0 10px rgba(21,101,192,.25);
 }
-
 .editActions,
 .loginActions{
 display:flex;
@@ -507,19 +548,16 @@ bottom:0;
 background:white;
 padding-top:10px;
 }
-
 .saveBtn{
 background:linear-gradient(135deg,#00c853,#009624);
 color:white;
 box-shadow:4px 4px 0 #00701a,6px 8px 14px rgba(0,0,0,.25);
 }
-
 .cancelBtn{
 background:linear-gradient(135deg,#ff5252,#c62828);
 color:white;
 box-shadow:4px 4px 0 #8e0000,6px 8px 14px rgba(0,0,0,.25);
 }
-
 .saveBtn,
 .cancelBtn{
 height:46px;
@@ -530,30 +568,17 @@ justify-content:center;
 font-size:15px;
 font-weight:bold;
 }
-
 .loginBtn{
 background:linear-gradient(135deg,#00c853,#009624);
 color:white;
 box-shadow:4px 4px 0 #00701a,6px 8px 14px rgba(0,0,0,.25);
 }
-
 @keyframes popIn{
-from{
-transform:scale(.9);
-opacity:0;
+from{transform:scale(.9);opacity:0;}
+to{transform:scale(1);opacity:1;}
 }
-to{
-transform:scale(1);
-opacity:1;
-}
-}
-
 @media print {
-@page{
-size:A4 portrait;
-margin:8mm;
-}
-
+@page{size:A4 portrait;margin:8mm;}
 html,body{
 margin:0;
 padding:0;
@@ -563,57 +588,9 @@ background:white;
 font-family:'Arimo',sans-serif;
 overflow:visible;
 }
-@media print{
-
-html,
-body,
-table,
-tr,
-td,
-th,
-.box,
-.activityCell,
-.activityTotalsCell{
-
-background:transparent !important;
-color:#000 !important;
-box-shadow:none !important;
-text-shadow:none !important;
-filter:none !important;
-
-}
-
-.highlight-total{
-
-background:transparent !important;
-border:none !important;
-box-shadow:none !important;
-color:#000 !important;
-
-}
-
-button{
-display:none!important;
-}
-
-}
-.container,
-.footer-left,
-.footer-right,
-h2,
-.top-buttons,
-.deleteBtn{
+button,.top-buttons,.container,.footer-left,#editModal,#loginModal,#scannerOverlay{
 display:none !important;
 }
-
-.editColumn{
-display:none !important;
-}
-
-tfoot button{
-display:none !important;
-}
-
 #printArea{
 display:block !important;
 width:100%;
@@ -621,7 +598,6 @@ margin:0;
 padding:0;
 overflow:visible;
 }
-
 #a4{
 width:100%;
 padding:0;
@@ -629,14 +605,12 @@ margin:0;
 box-sizing:border-box;
 overflow:visible;
 }
-
 table{
 width:100%;
 border-collapse:collapse;
 font-size:10px;
 table-layout:auto;
 }
-
 th,td{
 border:1px solid black;
 padding:3px;
@@ -644,66 +618,56 @@ white-space:nowrap;
 word-break:break-word;
 vertical-align:middle;
 }
-
 tr{
 page-break-inside:avoid;
 break-inside:avoid;
 }
-
 .activityCell{
 font-size:9px;
 line-height:11px;
 word-break:break-word;
 }
-
 .header{
 margin-bottom:8px;
 font-size:11px;
 gap:4px;
 flex-wrap:nowrap;
 }
-
 .header-left,
 .header-center,
 .header-right{
 gap:3px;
 }
-
 .headerLine{
 min-width:42px;
 max-width:85px;
 }
-
-.deleteColumn{
+.editColumn,
+.deleteColumn,
+tfoot button{
 display:none !important;
 }
-
 .activityTotalsCell,
 tfoot td{
 border:1px solid #000 !important;
 }
 }
-
 .table-wrapper{
 width:100%;
 }
-
 @media screen and (max-width: 768px){
 .table-wrapper{
 overflow-x:auto;
 -webkit-overflow-scrolling:touch;
 }
-
 table{
 min-width:700px;
 }
-
 .deleteBtn{
 font-size:10px;
 padding:2px 4px;
 }
 }
-
 .highlight-total{
 display:inline-block;
 padding:4px 10px;
@@ -714,30 +678,15 @@ color:#000;
 animation:goldGlow 1.5s infinite alternate;
 transition:.25s;
 }
-
 body.dark .highlight-total{
 background:#262626;
 color:#fff;
 border:3px solid #555;
 }
-
 @keyframes goldGlow{
-
-0%{
-box-shadow:
-0 0 5px #ffd700,
-0 0 10px #ffd700;
+0%{box-shadow:0 0 5px #ffd700,0 0 10px #ffd700;}
+100%{box-shadow:0 0 15px #ffea00,0 0 25px #ffb300,0 0 35px #ff6f00;}
 }
-
-100%{
-box-shadow:
-0 0 15px #ffea00,
-0 0 25px #ffb300,
-0 0 35px #ff6f00;
-}
-
-}
-
 .userLoginBox{
 display:flex;
 justify-content:center;
@@ -745,12 +694,10 @@ align-items:center;
 gap:8px;
 margin:12px auto;
 }
-
 .hiText{
 font-size:12px;
 font-weight:bold;
 }
-
 #usernameInput{
 width:100px;
 font-weight:bold;
@@ -758,7 +705,6 @@ padding:7px 10px;
 font-size:12px;
 margin:0;
 }
-
 #loadBtn{
 display:inline-block;
 background:linear-gradient(135deg,#1976d2,#0d47a1);
@@ -769,7 +715,6 @@ font-size:12px;
 margin-left:4px;
 border-radius:100px;
 }
-
 .loginBackdrop{
 display:none;
 position:fixed;
@@ -778,43 +723,68 @@ background:rgba(0,0,0,.55);
 z-index:10000;
 backdrop-filter:blur(4px);
 }
-
 .loginBackdrop.show{
 display:flex;
 align-items:center;
 justify-content:center;
 }
-
 .scannerOverlay{
 display:none;
 position:fixed;
 inset:0;
 z-index:99999;
 background:rgba(0,0,0,.9);
-padding:16px;
+padding:0;
 }
-
 .scannerOverlay.show{
 display:flex;
+flex-direction:column;
+}
+.scannerTopBar{
+display:flex;
+justify-content:space-between;
 align-items:center;
-justify-content:center;
-}
-
-.scannerBox{
-width:100%;
-max-width:420px;
-background:#111;
-border-radius:16px;
+gap:10px;
 padding:12px;
-box-shadow:0 10px 30px rgba(0,0,0,.45);
+background:rgba(0,0,0,.25);
 }
-
+.scannerBox{
+flex:1;
+width:100%;
+max-width:none;
+background:#111;
+border-radius:0;
+padding:0;
+box-shadow:none;
+}
 #reader{
 width:100%;
+height:100vh;
+}
+#reader video{
+border-radius:0;
+object-fit:cover;
+}
+.scannerActionBtn{
+background:#fff;
+color:#000;
+padding:8px 14px;
+margin:0;
+box-shadow:3px 3px 0 #999,5px 6px 12px rgba(0,0,0,.18);
+}
+.scannerActionBtn:hover{
+transform:translate(-1px,-1px);
+}
+body.dark .scannerActionBtn{
+background:#eee;
+color:#000;
+}
+body.dark .print-split{
+box-shadow:4px 4px 0 #111,6px 8px 14px rgba(0,0,0,.45);
 }
 
-#reader video{
-border-radius:12px;
+body.dark .print-split button{
+box-shadow:none!important;
 }
 
 </style>
@@ -878,23 +848,11 @@ border-radius:12px;
 <br>
 
 <div class="sobField">
-<input
-id="sobInput"
-type="tel"
-inputmode="numeric"
-maxlength="6"
-placeholder="Enter 6-digit SOB ID"
-autocomplete="off">
-
-<button
-id="scanBtn"
-type="button"
-onclick="startScanner()">
-
+<input id="sobInput" type="tel" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit SOB ID" autocomplete="off">
+<button id="scanBtn" type="button" onclick="startScanner()">
 <svg viewBox="0 0 24 24">
 <path d="M9 4L7.5 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.5L15 4H9zm3 4a5 5 0 1 1 0 10a5 5 0 0 1 0-10zm0 2.2a2.8 2.8 0 1 0 0 5.6a2.8 2.8 0 0 0 0-5.6z"/>
 </svg>
-
 </button>
 </div>
 
@@ -906,7 +864,16 @@ onclick="startScanner()">
 <br>
 
 <button onclick="printA4()">📄 Print My A4</button>
-<button onclick="printAllA4()">📚 Print ALL</button>
+
+<div class="print-all-wrap">
+<div class="print-split">
+<button class="print-print-btn" onclick="printSelectedUsers()">Print</button>
+<button class="print-all-btn" onclick="togglePrintMenu(event)" id="allPrintBtn">ALL ▼</button>
+</div>
+<div id="printMenu" class="print-dropdown">
+<div id="printUserList" class="print-user-list"></div>
+</div>
+</div>
 </div>
 
 <div id="printArea">
@@ -1014,44 +981,25 @@ onclick="startScanner()">
 </div>
 </div>
 
-<div class="footer-left">26G11 | V4.5</div>
+<div class="footer-left">26G18 | V4.6</div>
 
 <div id="scannerOverlay" class="scannerOverlay">
-<div class="scannerBox">
-<div style="text-align:right">
-<button onclick="closeScanner()" style="background:white;color:black;padding:8px 15px;margin-bottom:10px;">✕ Close</button>
+<div class="scannerTopBar">
+<button onclick="uploadQrImage()" class="scannerActionBtn">Upload</button>
+<button onclick="closeScanner()" class="scannerActionBtn">✕ Close</button>
 </div>
+<div class="scannerBox">
 <div id="reader"></div>
+<input id="uploadQrInput" type="file" accept="image/*" capture="environment" style="display:none" onchange="handleQrUpload(event)">
 </div>
 </div>
 
 <script>
-
 function todayString(){
-
-return new Intl.DateTimeFormat(
-'en-GB',
-{
-timeZone:'Asia/Kolkata',
-day:'2-digit',
-month:'2-digit',
-year:'numeric'
-}
-).format(new Date());
-
+return new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date());
 }
 function timeString(){
-
-return new Intl.DateTimeFormat(
-'en-US',
-{
-timeZone:'Asia/Kolkata',
-hour:'2-digit',
-minute:'2-digit',
-hour12:true
-}
-).format(new Date());
-
+return new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',hour12:true}).format(new Date());
 }
 const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw_Vhlq9wHwMBBrY0gmzfLSObRzxR_ATE2jonce0aoO38O5xcjbzkG5I1sFhp61NvTQ/exec";
 let data = JSON.parse(localStorage.getItem("sobData")) || [];
@@ -1086,37 +1034,17 @@ const editAmPm = document.getElementById("editAmPm");
 const loginModal = document.getElementById("loginModal");
 const loginUsername = document.getElementById("loginUsername");
 const scannerOverlay = document.getElementById("scannerOverlay");
-
-const todayKey = todayString();
-const savedDate = localStorage.getItem("sobDate");
-
-if(savedDate !== todayKey){
-data = [];
-localStorage.removeItem("sobData");
-localStorage.setItem("sobDate",todayKey);
-}
-
-function pad2(n){
-return String(n).padStart(2,"0");
-}
-
-function normalizeUsername(name){
-return (name || "").trim().toLowerCase();
-}
-
+const printMenu = document.getElementById("printMenu");
+const printUserList = document.getElementById("printUserList");
+const allPrintBtn = document.getElementById("allPrintBtn");
+const uploadQrInput = document.getElementById("uploadQrInput");
+function pad2(n){ return String(n).padStart(2,"0"); }
 function setEditTimeOptions(){
 editHour.innerHTML = "";
-for(let i = 1; i <= 12; i++){
-editHour.innerHTML += `<option value="${i}">${i}</option>`;
-}
-
+for(let i = 1; i <= 12; i++) editHour.innerHTML += `<option value="${i}">${i}</option>`;
 editMinute.innerHTML = "";
-for(let i = 0; i < 60; i++){
-let mm = pad2(i);
-editMinute.innerHTML += `<option value="${mm}">${mm}</option>`;
+for(let i = 0; i < 60; i++) editMinute.innerHTML += `<option value="${pad2(i)}">${pad2(i)}</option>`;
 }
-}
-
 function calc(){
 let v = combo.value;
 if(!v){
@@ -1127,35 +1055,28 @@ totalEl.innerText = 0;
 warning.innerText = "";
 return;
 }
-
 let p = v.split(",");
 let ta = +p[0], tc = +p[1], o = +p[2], pi = +p[3];
 let na = p[4] === "NA";
 let a = Math.max(0, +adults.value || 0);
 let c = Math.max(0, +children.value || 0);
-
 warning.innerText = (na && c > 0) ? "⚠ Children not allowed" : "";
-
 let tpu = (a * ta) + (c * tc);
 let oepl = (a + c) * o;
 let paepl = (a + c) * pi;
 let total = tpu + oepl + paepl;
-
 tpuEl.innerText = tpu;
 oeplEl.innerText = oepl;
 paeplEl.innerText = paepl;
 totalEl.innerText = total;
-
 saveFormState();
 return { tpu, oepl, paepl, total };
 }
-
 function saveFormState(){
 localStorage.setItem("lastCombo", combo.value);
 localStorage.setItem("lastAdults", adults.value);
 localStorage.setItem("lastChildren", children.value);
 }
-
 function closeScanner(){
 if(qrScanner){
 qrScanner.stop().then(() => {
@@ -1166,12 +1087,10 @@ scannerOverlay.classList.remove("show");
 scannerOverlay.classList.remove("show");
 }
 }
-
 function getVendorBreakup(comboName, pax){
 function line(items){
 return items.map(i => `${i.name}: ${i.price * pax}`).join(" | ");
 }
-
 if(comboName.includes("Snow Adventure")) return `OEPL → ${line([{name:"Snow",price:255}])}`;
 if(comboName.includes("Adventure Combo")) return `PAEPL → ${line([{name:"Gamezone",price:227}])}`;
 if(comboName.includes("TU Explorer")) return `OEPL → ${line([{name:"Wax",price:70}])}\nPAEPL → ${line([{name:"Eyelusion",price:70},{name:"WOG",price:80}])}`;
@@ -1189,13 +1108,11 @@ if(comboName.includes("Divine Rush")) return `PAEPL → ${line([{name:"Gamezone"
 if(comboName.includes("Ultimate Mega")) return `OEPL → ${line([{name:"Snow",price:150},{name:"Food",price:99},{name:"Souvenir",price:100},{name:"Wax",price:100}])}\nPAEPL → ${line([{name:"Eyelusion",price:50},{name:"Mayalok",price:150},{name:"Gamezone",price:2100},{name:"WOG",price:50}])}`;
 return "-";
 }
-
 function showLoginModal(){
 loginModal.classList.add("show");
 loginUsername.value = localStorage.getItem("username") || "";
 setTimeout(() => loginUsername.focus(), 100);
 }
-
 function confirmUsername(){
 let savedUsername = loginUsername.value.trim();
 if(!savedUsername){
@@ -1207,41 +1124,30 @@ loginModal.classList.remove("show");
 document.getElementById("usernameInput").value = savedUsername;
 usernameEl.innerText = savedUsername;
 }
-
 async function restoreTodayData(){
 let username = document.getElementById("usernameInput").value.trim();
 if(!username){
 showLoginModal();
 return;
 }
-
-let today = todayString();
-let url =
-APP_SCRIPT_URL +
-"?date=" + encodeURIComponent(today) +
-"&displayName=" + encodeURIComponent(username);
+let url = APP_SCRIPT_URL + "?date=" + encodeURIComponent(todayString()) + "&displayName=" + encodeURIComponent(username);
 const res = await fetch(url);
 const rows = await res.json();
-
 if(rows.status === "error"){
-    alert(rows.message);
-    return;
+alert(rows.message);
+return;
 }
-
 if(!rows.length){
-    alert("No data found.");
-    return;
+alert("No data found.");
+return;
 }
-
 data = rows;
 if(rows[0].displayName) document.getElementById("usernameInput").value = rows[0].displayName;
 localStorage.setItem("sobData", JSON.stringify(data));
 render();
 }
-
 function startScanner(){
 scannerOverlay.classList.add("show");
-
 if(qrScanner){
 qrScanner.stop().finally(() => {
 qrScanner = null;
@@ -1251,14 +1157,13 @@ initScanner();
 initScanner();
 }
 }
-
 function initScanner(){
 qrScanner = new Html5Qrcode("reader");
 qrScanner.start(
 { facingMode: "environment" },
 {
 fps: 15,
-qrbox: { width: 260, height: 260 },
+qrbox: (vw, vh) => ({ width: vw, height: vh }),
 aspectRatio: 1
 },
 onScanSuccess,
@@ -1269,51 +1174,54 @@ alert("Camera could not start.");
 closeScanner();
 });
 }
-
+function uploadQrImage(){
+uploadQrInput.click();
+}
+async function handleQrUpload(event){
+const file = event.target.files && event.target.files[0];
+if(!file) return;
+try{
+const result = await Html5Qrcode.scanFile(file, true);
+onScanSuccess(result);
+}catch(err){
+alert("No QR code found in image.");
+}
+event.target.value = "";
+}
 function onScanSuccess(decodedText){
 let m = decodedText.match(/(?:SOB0*)?([0-9]{6})/i);
 closeScanner();
-
 if(m){
 sobInput.value = m[1];
 setTimeout(() => saveEntry(), 200);
 }
 }
-
-function onScanFailure(){
-}
-
+function onScanFailure(){}
 function saveEntry(){
 let raw = sobInput.value.trim();
 let username = document.getElementById("usernameInput").value.trim();
 localStorage.setItem("username", username);
-let usernameKey = normalizeUsername(username);
-
+let usernameKey = (username || "").trim().toLowerCase();
 let match = raw.match(/SOB0*([0-9]{6})/i);
 if(match){
 raw = match[1];
 sobInput.value = raw;
 }
-
 if(!/^[0-9]{6}$/.test(raw)){
 alert("Enter valid 6-digit SOB ID");
 return;
 }
-
 let sob = "SOB000" + raw;
 if(data.some(d => d.sob === sob)){
 alert("This SOB ID already exists");
 return;
 }
-
 let r = calc();
 if(!r) return;
-
 let pax = (+adults.value || 0) + (+children.value || 0);
 let comboName = combo.options[combo.selectedIndex].text;
 let breakup = getVendorBreakup(comboName, pax);
 const entryId = crypto.randomUUID();
-
 data.push({
 entryId,
 deviceId,
@@ -1326,13 +1234,11 @@ children: (+children.value || 0),
 breakup,
 time: timeString()
 });
-
 localStorage.setItem("sobData", JSON.stringify(data));
 localStorage.setItem("username", username);
 localStorage.setItem("usernameKey", usernameKey);
 render();
 sobInput.value = "";
-
 fetch(APP_SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
@@ -1354,42 +1260,24 @@ time:timeString()
 })
 .then(r => r.json())
 .then(res => {
-
-    if(res.status === "success"){
-
-        console.log("Saved");
-
-    }else if(res.status === "duplicate"){
-
-        alert(res.message);
-
-        data.pop();
-        localStorage.setItem("sobData",JSON.stringify(data));
-        render();
-
-    }else{
-
-        alert(res.message || "Unknown Error");
-
-    }
-
+if(res.status === "success"){
+console.log("Saved");
+}else if(res.status === "duplicate"){
+alert(res.message);
+data.pop();
+localStorage.setItem("sobData",JSON.stringify(data));
+render();
+}else{
+alert(res.message || "Unknown Error");
+}
 })
 .catch(err=>{
-
-    data.pop();
-
-    localStorage.setItem(
-        "sobData",
-        JSON.stringify(data)
-    );
-
-    render();
-
-    alert("Save failed.\nCheck internet connection.");
-
+data.pop();
+localStorage.setItem("sobData",JSON.stringify(data));
+render();
+alert("Save failed.\nCheck internet connection.");
 });
 }
-
 function resetForm(){
 combo.selectedIndex = 0;
 adults.value = "";
@@ -1404,101 +1292,59 @@ paeplEl.innerText = 0;
 totalEl.innerText = 0;
 warning.innerText = "";
 }
-
 async function resetAllData(){
-
 if(!confirm("Reset all today's SOB IDs?")) return;
-
 let today=todayString();
-
 for(const row of data){
-
 await fetch(APP_SCRIPT_URL,{
-    method:"POST",
-    
-    body:JSON.stringify({
-
+method:"POST",
+body:JSON.stringify({
 action:"RESET",
-
 date:today,
-
 entryId:row.entryId,
-
 deviceId:deviceId
-
 })
 })
 .then(r=>r.json())
 .then(res=>{
-
 if(res.status=="success"){
-
 console.log("Saved");
-
 }
 else if(res.status=="duplicate"){
-
 alert(res.message);
-
 }
 else{
-
 alert(res.message||"Error");
-
 }
-
 })
 .catch(e=>{
-
 alert(e);
-
 });
-
 }
-
 data=[];
-
 localStorage.removeItem("sobData");
-
 render();
-
 }
-
 async function deleteEntry(index){
 if(!confirm("Delete this SOB ID?")) return;
 const row = data[index];
-
 const res = await fetch(APP_SCRIPT_URL,{
-    method:"POST",
-    
-    body:JSON.stringify({
-
-        action:"DELETE",
-
-        date:todayString(),
-
-        entryId:row.entryId,
-
-        deviceId:deviceId
-
-    })
+method:"POST",
+body:JSON.stringify({
+action:"DELETE",
+date:todayString(),
+entryId:row.entryId,
+deviceId:deviceId
+})
 });
-
 const json=await res.json();
-
 if(json.status!="deleted"){
-
 alert("Delete failed.");
-
 return;
-
 }
-
 data.splice(index,1);
-
 render();
 }
-
 function openEditModal(index){
 editingIndex = index;
 let d = data[index];
@@ -1506,7 +1352,6 @@ editSob.value = d.sob.replace("SOB000","");
 editAdults.value = d.adults;
 editChildren.value = d.children;
 editCombo.innerHTML = "";
-
 Array.from(combo.options).slice(1).forEach(opt => {
 let o = document.createElement("option");
 o.value = opt.value;
@@ -1514,9 +1359,7 @@ o.textContent = opt.text;
 if(opt.text === d.comboName) o.selected = true;
 editCombo.appendChild(o);
 });
-
 setEditTimeOptions();
-
 let tm = (d.time || "").match(/(\d{1,2}):(\d{2})\s?(AM|PM)/i);
 if(tm){
 editHour.value = String(parseInt(tm[1]));
@@ -1531,52 +1374,40 @@ editHour.value = String(h);
 editMinute.value = pad2(now.getMinutes());
 editAmPm.value = ampm;
 }
-
 editModal.style.display = "block";
 }
-
 function closeEditModal(){
 editModal.style.display = "none";
 editingIndex = -1;
 }
-
 function saveEdit(){
 if(editingIndex < 0) return;
-
 let raw = editSob.value.trim();
 if(!/^[0-9]{6}$/.test(raw)){
 alert("Enter valid 6-digit SOB ID");
 return;
 }
-
 let sob = "SOB000" + raw;
 if(data.some((d,i) => i !== editingIndex && d.sob === sob)){
 alert("This SOB ID already exists");
 return;
 }
-
 let comboValue = editCombo.value;
 let comboText = editCombo.options[editCombo.selectedIndex]?.text || "";
 let tempCombo = combo.value;
 let tempAdults = adults.value;
 let tempChildren = children.value;
-
 combo.value = comboValue;
 adults.value = editAdults.value;
 children.value = editChildren.value;
 let r = calc();
-
 combo.value = tempCombo;
 adults.value = tempAdults;
 children.value = tempChildren;
 calc();
-
 if(!r) return;
-
 let pax = (+editAdults.value || 0) + (+editChildren.value || 0);
 let breakup = getVendorBreakup(comboText, pax);
-const originalSob = data[editingIndex].sob;
-
 data[editingIndex] = {
 ...data[editingIndex],
 sob,
@@ -1590,9 +1421,7 @@ total:r.total,
 breakup,
 time:`${editHour.value}:${editMinute.value} ${editAmPm.value}`
 };
-
 localStorage.setItem("sobData", JSON.stringify(data));
-
 fetch(APP_SCRIPT_URL,{
 method:"POST",
 body:JSON.stringify({
@@ -1614,42 +1443,30 @@ time:`${editHour.value}:${editMinute.value} ${editAmPm.value}`
 })
 })
 .then(r => r.json())
-.then(res=>{
-console.log(res);
-})
-.then(txt => console.log("Update response:", txt))
+.then(res=>{ console.log(res); })
 .catch(err => console.log("Network Error while updating:", err));
-
 render();
 closeEditModal();
 }
-
 function editEntry(index){
 openEditModal(index);
 }
-
 function formatTime(t){
-
 if(!t) return "";
-
+const m = String(t).match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+if(m){
+return `${m[1].padStart(2,"0")}:${m[2]} ${m[3].toUpperCase()}`;
+}
 const d = new Date(t);
-
 if(!isNaN(d)){
-return d.toLocaleTimeString('en-US',{
+return new Intl.DateTimeFormat('en-US',{
+timeZone:'Asia/Kolkata',
 hour:'2-digit',
 minute:'2-digit',
 hour12:true
-});
+}).format(d);
 }
-
-const m = String(t).match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-
-if(m){
-return `${m[1]}:${m[2]} ${m[3].toUpperCase()}`;
-}
-
 return String(t);
-
 }
 function render(){
 dataBody.innerHTML = "";
@@ -1659,7 +1476,6 @@ let oeplSum = 0;
 let paeplSum = 0;
 let oeplActivities = {};
 let paeplActivities = {};
-
 data.forEach((d,i)=>{
 dataBody.innerHTML += `
 <tr>
@@ -1675,19 +1491,15 @@ dataBody.innerHTML += `
 <td style="font-size:10px;">${formatTime(d.time)}</td>
 </tr>
 `;
-
 tpuSum += d.tpu;
 oeplSum += d.oepl;
 paeplSum += d.paepl;
 totalAll += d.total;
-
 let tempDiv = document.createElement("div");
 tempDiv.innerHTML = d.breakup;
 let text = tempDiv.innerText.split("\n");
-
 text.forEach(line => {
 line = line.trim();
-
 if(line.startsWith("OEPL")){
 let activities = line.replace("OEPL →","").split("|");
 activities.forEach(a => {
@@ -1698,7 +1510,6 @@ let value = parseInt(parts[1]) || 0;
 oeplActivities[name] = (oeplActivities[name] || 0) + value;
 });
 }
-
 if(line.startsWith("PAEPL")){
 let activities = line.replace("PAEPL →","").split("|");
 activities.forEach(a => {
@@ -1711,18 +1522,15 @@ paeplActivities[name] = (paeplActivities[name] || 0) + value;
 }
 });
 });
-
 function formatActivities(obj){
 return Object.entries(obj).map(([k,v]) => `${k}: ${v}`).join(" | ");
 }
-
 grandT.innerHTML = "<b>" + totalAll + "</b>";
 tpuT.innerHTML = "<b>" + tpuSum + "</b>";
 oeplT.innerHTML = "<b>" + oeplSum + "</b>";
 paeplT.innerHTML = "<b>" + paeplSum + "</b>";
 activityTotals.innerHTML = "<u>OEPL</u> → " + formatActivities(oeplActivities) + "<br>" + "<u>PAEPL</u> → " + formatActivities(paeplActivities);
 }
-
 function printA4(){
 let username = document.getElementById("usernameInput").value.trim();
 if(username){
@@ -1731,69 +1539,218 @@ localStorage.setItem("username", username);
 }
 window.print();
 }
-
-async function printAllA4(){
-try{
-const username=document.getElementById("usernameInput").value.trim();
-const originalData=structuredClone(data);
-const originalUser = usernameEl.innerText;
-const today = todayString();
-
-const res = await fetch(
-APP_SCRIPT_URL +
-"?date=" + encodeURIComponent(today) +
-"&all=true"
-);
-const rows=await res.json();
-
-if(rows.status=="error"){
-
-alert(rows.message);
-
-return;
-
+function getSelectedPrintUsers(){
+const allCb = document.getElementById("printAllUsers");
+const userCbs = [...printUserList.querySelectorAll(".print-user-check")];
+if(allCb && allCb.checked) return null;
+return userCbs.filter(cb => cb.checked).map(cb => cb.value);
 }
+function updatePrintButtonLabel(){
+const selected = getSelectedPrintUsers();
 
+allPrintBtn.innerHTML =
+selected && selected.length
+? `${selected.length} ▼`
+: `ALL ▼`;
+}
+async function fetchUsersFromAppsScript(){
+try{
+const res = await fetch(APP_SCRIPT_URL + "?date=" + encodeURIComponent(todayString()) + "&all=true");
+const rows = await res.json();
+if(!Array.isArray(rows)) return [];
+return [...new Set(rows.map(r => (r.displayName || "").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+}catch(e){
+console.error(e);
+return [];
+}
+}
+function buildPrintMenu(users){
+if(!users.length){
+printUserList.innerHTML = `<div style="font-size:12px;">No users found.</div>`;
+updatePrintButtonLabel();
+return;
+}
+printUserList.innerHTML = `
+<label class="print-user-item">
+<input type="checkbox" id="printAllUsers" checked>
+<span><b>All</b></span>
+</label>
+<div style="border-top:1px solid var(--border);margin:6px 0;"></div>
+${users.map(name => `
+<label class="print-user-item">
+<input type="checkbox" class="print-user-check" value="${name}" checked>
+<span>${name}</span>
+</label>
+`).join("")}
+`;
+const allCb = document.getElementById("printAllUsers");
+const userCbs = [...printUserList.querySelectorAll(".print-user-check")];
+allCb.addEventListener("change", () => {
+userCbs.forEach(cb => cb.checked = allCb.checked);
+updatePrintButtonLabel();
+});
+userCbs.forEach(cb => cb.addEventListener("change", () => {
+allCb.checked = userCbs.every(x => x.checked);
+updatePrintButtonLabel();
+}));
+updatePrintButtonLabel();
+}
+async function togglePrintMenu(e){
+e.stopPropagation();
+const isOpen = printMenu.classList.contains("show");
+if(!isOpen){
+const users = await fetchUsersFromAppsScript();
+buildPrintMenu(users);
+printMenu.classList.add("show");
+}else{
+printMenu.classList.remove("show");
+}
+}
+async function printSelectedUsers(){
+const selected = getSelectedPrintUsers();
+printMenu.classList.remove("show");
+await printAllA4(selected);
+}
+function buildPrintablePage(rows, userName){
+let totalAll = 0;
+let tpuSum = 0;
+let oeplSum = 0;
+let paeplSum = 0;
+let htmlRows = "";
+let oeplActivities = {};
+let paeplActivities = {};
+rows.forEach((d, i) => {
+htmlRows += `
+<tr>
+<td>${i + 1}</td>
+<td><b>${d.sob || ""}</b><br><span style="font-size:9px;white-space:nowrap;word-break:break-word;">(${((d.comboName||"")).match(/\d+\/(?:\d+|NA)/)?.[0] || ""}) (${d.adults || 0} A + ${d.children || 0} C)</span></td>
+<td>${d.tpu || 0}</td>
+<td>${d.oepl || 0}</td>
+<td>${d.paepl || 0}</td>
+<td>${d.total || 0}</td>
+<td class="activityCell"><pre>${d.breakup || "-"}</pre></td>
+<td style="font-size:10px;">${formatTime(d.time)}</td>
+</tr>
+`;
+tpuSum += (+d.tpu || 0);
+oeplSum += (+d.oepl || 0);
+paeplSum += (+d.paepl || 0);
+totalAll += (+d.total || 0);
+const tempDiv = document.createElement("div");
+tempDiv.innerHTML = d.breakup || "";
+tempDiv.innerText.split("\n").forEach(line => {
+line = line.trim();
+if(line.startsWith("OEPL")){
+line.replace("OEPL →","").split("|").forEach(a => {
+let parts = a.split(":");
+if(parts.length < 2) return;
+let name = parts[0].trim();
+let value = parseInt(parts[1]) || 0;
+oeplActivities[name] = (oeplActivities[name] || 0) + value;
+});
+}
+if(line.startsWith("PAEPL")){
+line.replace("PAEPL →","").split("|").forEach(a => {
+let parts = a.split(":");
+if(parts.length < 2) return;
+let name = parts[0].trim();
+let value = parseInt(parts[1]) || 0;
+paeplActivities[name] = (paeplActivities[name] || 0) + value;
+});
+}
+});
+});
+function formatActivities(obj){
+return Object.entries(obj).map(([k,v]) => `${k}: ${v}`).join(" | ");
+}
+return `
+<div class="a4Page">
+<div id="a4">
+<div class="header">
+<div class="header-left">
+<b class="headerText">POS# :</b>
+<span class="headerLine"></span>
+</div>
+<div class="header-center">
+<span class="headerText">USERNA<b>M</b>E.<b>S</b> :</span>
+<span class="headerLine">${userName || ""}</span>
+</div>
+<div class="header-right">
+<b class="headerText">DATE :</b>
+<span>${todayString()}</span>
+</div>
+</div>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>SR</th>
+<th>SOB ID</th>
+<th>TPU</th>
+<th>OEPL</th>
+<th>PAEPL</th>
+<th>TOTAL</th>
+<th>ACTIVITIES' AMOUNTS</th>
+<th>TIME</th>
+</tr>
+</thead>
+<tbody>
+${htmlRows}
+</tbody>
+<tfoot>
+<tr>
+<td colspan="2"><b style="font-size:11px;">TOTAL</b></td>
+<td><b>${tpuSum}</b></td>
+<td><b>${oeplSum}</b></td>
+<td><b>${paeplSum}</b></td>
+<td><b>${totalAll}</b></td>
+<td class="activityTotalsCell"><u>OEPL</u> → ${formatActivities(oeplActivities)}<br><u>PAEPL</u> → ${formatActivities(paeplActivities)}</td>
+<td></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<hr style="border:1px dashed #999;margin:12px 0;">
+</div>`;
+}
+async function printAllA4(selectedUsers = null){
+try{
+const today = todayString();
+const res = await fetch(APP_SCRIPT_URL + "?date=" + encodeURIComponent(today) + "&all=true");
+const rows = await res.json();
+if(rows.status == "error"){
+alert(rows.message);
+return;
+}
 if(!rows.length){
 alert("No entries found.");
 return;
 }
-
-let grouped = {};
-rows.forEach(r => {
-const key = (r.displayName || "Unknown").trim().toLowerCase();
-if(!grouped[key]) grouped[key] = { name:(r.displayName || "Unknown").trim(), rows:[] };
-grouped[key].rows.push(r);
-});
-
-let html = "";
-for(const group of Object.values(grouped)){
-data = group.rows;
-usernameEl.innerText = group.name;
-render();
-let page=document.getElementById("printArea").cloneNode(true);
-
-page.querySelectorAll(".editColumn,.deleteColumn").forEach(e=>e.remove());
-
-page.querySelectorAll(".editBtn,.deleteBtn,#resetAllBtn").forEach(e=>e.remove());
-
-html+=`
-<div class="a4Page">
-${page.innerHTML}
-<hr style="border:1px dashed #999;margin:12px 0;">
-</div>`;
+let filteredRows = rows;
+if(Array.isArray(selectedUsers) && selectedUsers.length){
+const allowed = new Set(selectedUsers.map(v => String(v).trim().toLowerCase()));
+filteredRows = rows.filter(r => allowed.has((r.displayName || "Unknown").trim().toLowerCase()));
 }
-
-data = originalData;
-usernameEl.innerText = originalUser;
-render();
-
+if(!filteredRows.length){
+alert("No selected users to print.");
+return;
+}
+let grouped = {};
+filteredRows.forEach(r => {
+const key = (r.displayName || "Unknown").trim();
+if(!grouped[key]) grouped[key] = [];
+grouped[key].push(r);
+});
+let html = "";
+for(const [name, rowsForUser] of Object.entries(grouped)){
+html += buildPrintablePage(rowsForUser, name);
+}
 const win = window.open("", "_blank");
 if(!win){
 alert("Popup blocked.\nPlease allow popups for this website.");
 return;
 }
-
 win.document.open();
 win.document.write(`
 <!DOCTYPE html>
@@ -1806,21 +1763,13 @@ win.document.write(`
 ${document.querySelector("style").innerHTML}
 body{margin:0;padding:0;font-family:'Arimo',sans-serif;}
 .a4Page{margin:0 0 12px 0;padding:0;page-break-inside:avoid;break-inside:avoid;}
-.editColumn,
-.deleteColumn,
-.editBtn,
-.deleteBtn,
-#resetAllBtn,
-tfoot button{
-display:none!important;
-}
+.editColumn,.deleteColumn,.editBtn,.deleteBtn,#resetAllBtn,tfoot button{display:none!important;}
 </style>
 </head>
 <body>${html}</body>
 </html>
 `);
 win.document.close();
-
 win.onload = function(){
 setTimeout(function(){
 win.focus();
@@ -1832,42 +1781,34 @@ console.error(err);
 alert("Unable to print all.");
 }
 }
-
+document.addEventListener("click", (e) => {
+if(!e.target.closest(".print-all-wrap")){
+printMenu.classList.remove("show");
+}
+});
 function toggleTheme(){
-
-const dark=document.body.classList.toggle("dark");
-
-localStorage.setItem("theme",dark?"dark":"light");
-
-document.querySelector(".hiText").textContent=
-dark?"🌙 Hi,":"🌞 Hi,";
-
+const dark = document.body.classList.toggle("dark");
+localStorage.setItem("theme", dark ? "dark" : "light");
+document.querySelector(".hiText").textContent = dark ? "🌙 Hi," : "🌞 Hi,";
 }
-
 if(localStorage.getItem("theme")==="dark"){
-    document.body.classList.add("dark");
-    document.querySelector(".hiText").textContent="🌙 Hi,";
+document.body.classList.add("dark");
+document.querySelector(".hiText").textContent="🌙 Hi,";
 }
-function setDate(){
-dateEl.innerText = todayString();
-}
-
+function setDate(){ dateEl.innerText = todayString(); }
 function restoreFormState(){
 combo.value = localStorage.getItem("lastCombo") || "";
 adults.value = localStorage.getItem("lastAdults") || "";
 children.value = localStorage.getItem("lastChildren") || "";
 if(combo.value) calc();
 }
-
 setEditTimeOptions();
 restoreFormState();
-
 let deviceId = localStorage.getItem("deviceId");
 if(!deviceId){
 deviceId = "DEV-" + Date.now().toString(36) + "-" + Math.random().toString(36).substring(2,8).toUpperCase();
 localStorage.setItem("deviceId",deviceId);
 }
-
 let savedUsername = localStorage.getItem("username");
 if(!savedUsername){
 showLoginModal();
@@ -1875,7 +1816,6 @@ showLoginModal();
 document.getElementById("usernameInput").value = savedUsername;
 usernameEl.innerText = savedUsername;
 }
-
 setDate();
 render();
 </script>
